@@ -68,7 +68,7 @@ VS Code's 'Dev Containers' extension can be used to attach to a running containe
 xhost +local:root
 ```
 
-<!-- ---
+---
 
 ## Citation
 If you use this simulator, please cite the original paper:
@@ -79,8 +79,9 @@ If you use this simulator, please cite the original paper:
   author={Diaz-Gonzalez, Abel and others},
   booktitle={AIAA SciTech 2026},
   year={2026}
+  doi={10.2514/6.2026-1797}
 }
-``` -->
+```
 
 ---
 
