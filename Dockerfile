@@ -27,7 +27,9 @@ ENV LANG=en_US.UTF-8 \
 
 # INSTALL ARDUPILOT
 RUN git clone https://github.com/4belito/ardupilot.git --recurse-submodules && \
+  cd ardupilot && \
   git checkout --recurse-submodules 6e4ccf01e1e9e0d6ef00cb6ff85fbfa668ff0f31 && \
+  cd .. && \
   ./ardupilot/Tools/environment_install/install-prereqs-ubuntu.sh -y && \
   sudo apt-get -y autoremove && \
   sudo apt-get clean autoclean && \
@@ -110,8 +112,8 @@ RUN sudo apt-get update && \
   sudo apt-get clean autoclean && \
   rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 RUN git clone https://github.com/4belito/ardupilot_gazebo.git && \
-  git checkout --recurse-submodules cfd3870bf789602a881fdb18ac8e2b8e6cdfd89c && \
   cd ardupilot_gazebo && \
+  git checkout --recurse-submodules cfd3870bf789602a881fdb18ac8e2b8e6cdfd89c && \
   mkdir build && \
   cd build && \
   cmake .. && \
