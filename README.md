@@ -56,7 +56,7 @@ To support this evolving ecosystem, UAV-CYBER-SIM offers a comprehensive testbed
 
 **Note:** The installation instructions for this fork has been modified, and is thus different from the original version shown in [`4belito/uav-cyber-sim`](https://github.com/4belito/uav-cyber-sim).
 
-As of now, it is **not** recommended that you build and run the Docker image and container using the VSCode `devcontainer` CLI.
+As of now, it is *not* recommended to build and run the Docker image and container for this fork using the VSCode `devcontainer` CLI.
 
 1. Build the Docker image for [uli-net-sim](https://github.com/brycethebjorkman/uli-net-sim).
 
