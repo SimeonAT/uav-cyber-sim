@@ -139,7 +139,7 @@ RUN source ~/miniconda3/bin/activate && \
   pip install numpy pymavlink plotly nbformat notebook
 
 # CLONE THE REPO
-RUN git clone https://github.com/4belito/uav-cyber-sim.git && \
+RUN git clone git@github.com:SimeonAT/uav-cyber-sim.git && \
   cd uav-cyber-sim && \
   git checkout parallel-simulation
 WORKDIR /home/ubuntu/uav-cyber-sim
