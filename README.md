@@ -68,7 +68,11 @@ docker build --tag "uav-cyber-sim" .
 
 3. After the container has been built, launch the container with the following command:
 ```shell
-docker run -u ubuntu --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev/dri:/dev/dri:ro" --name uav-cyber-sim -d uav-cyber-sim:latest
+docker run -u ubuntu --env="DISPLAY" \
+--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+--volume="/dev/dri:/dev/dri:ro" \
+--volume="/home/simeon-gpu/Desktop/Repositories/uav-cyber-sim:/home/ubuntu/uav-cyber-sim" \
+--name uav-cyber-sim -d uav-cyber-sim:latest
 ```
 
 4. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
