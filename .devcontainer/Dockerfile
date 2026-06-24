@@ -158,7 +158,7 @@ RUN source ~/miniconda3/bin/activate && \
   pymavlink
 
 # CLONE THE REPO
-RUN git clone git@github.com:SimeonAT/uav-cyber-sim.git
+RUN git clone https://github.com/SimeonAT/uav-cyber-sim.git
 
 
 
