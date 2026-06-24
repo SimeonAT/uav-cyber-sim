@@ -1,25 +1,23 @@
 {
   "name": "uav-cyber-sim (X11 over SSH)",
-  //"image": "uav-cyber-sim",
-  "build": {
-    "context": "..",
-    "dockerfile": "Dockerfile",
-    "args": {
-      "UID": "1001",
-      "GID": "1001"
-    }
-  },
+  "image": "uav-cyber-sim-main:latest",
+  // "build": {
+  //   "context": "..",
+  //   "dockerfile": "Dockerfile",
+  //   "args": {
+  //     "UID": "1001",
+  //     "GID": "1001"
+  //   }
+  // },
   "runArgs": [
     "--network",
     "host"
   ],
   "containerEnv": {
-    "DISPLAY": "${env:DISPLAY}",
-    "XAUTHORITY": "/tmp/.Xauthority"
+    "DISPLAY": "${env:DISPLAY}"
   },
   "mounts": [
-    "type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix",
-    "type=bind,source=${env:HOME}/.Xauthority,target=/tmp/.Xauthority"
+    "type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
   ],
   "postAttachCommand": "sudo chown -R ubuntu /workspaces",
   // "customizations": {
