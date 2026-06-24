@@ -174,18 +174,7 @@ RUN apt-get update && \
   xargs -r -a /tmp/packages.txt apt-get install --yes --no-install-recommends && \
   rm -rf /var/lib/apt/lists/* /tmp/manual.txt
 
-# --- Make UID/GID configurable and align the runtime user ---
-ARG UID=1001
-ARG GID=1001
-
-# Ensure group/user IDs match the args
-RUN groupmod -o -g ${GID} ubuntu && \
-  usermod  -o -u ${UID} -g ${GID} ubuntu && \
-  # IMPORTANT: fix ownership of files created earlier under the old UID/GID
-  chown -R ${UID}:${GID} /home/ubuntu
-
-# Copy uli-net-sim content owned by the runtime user
-COPY --from=netsim --chown=${UID}:${GID} /usr/uli-net-sim /usr/uli-net-sim
+COPY --from=netsim --chown=ubuntu:ubuntu /usr/uli-net-sim /usr/uli-net-sim
 
 USER ubuntu
 WORKDIR /home/ubuntu/uav-cyber-sim
