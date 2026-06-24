@@ -84,8 +84,8 @@ WORKDIR /home/ubuntu
 RUN git clone https://github.com/4belito/ardupilot.git --recurse-submodules
 RUN cd ardupilot && \
   git checkout --recurse-submodules 6e4ccf01e1e9e0d6ef00cb6ff85fbfa668ff0f31 && \
-  cd .. && \
-  RUN ./ardupilot/Tools/environment_install/install-prereqs-ubuntu.sh -y
+  cd ..
+RUN ./ardupilot/Tools/environment_install/install-prereqs-ubuntu.sh -y
 # add local python modules to path
 RUN echo 'export PATH=~/.local/bin:$PATH' >> ~/.profile
 # test run
