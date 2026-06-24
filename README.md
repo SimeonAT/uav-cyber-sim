@@ -71,7 +71,7 @@ docker build --tag "uav-cyber-sim" .
 docker run -u ubuntu --env="DISPLAY" \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
 --volume="/dev/dri:/dev/dri:ro" \
---volume="/home/simeon-gpu/Desktop/Repositories/uav-cyber-sim:/home/ubuntu/uav-cyber-sim" \
+--volume="[Path to directory containing `uav-cyber-sim`]:/home/ubuntu/uav-cyber-sim" \
 --name uav-cyber-sim -d uav-cyber-sim:latest
 ```
 
