@@ -54,18 +54,28 @@ To support this evolving ecosystem, UAV-CYBER-SIM offers a comprehensive testbed
 
 ## Installation Instructions
 
-Build the Docker image for [uli-net-sim](https://github.com/brycethebjorkman/uli-net-sim) and then this repository.
+**Note:** The installation instructions for this fork has been modified, and is thus different from the original version shown in `4belito/uav-cyer-sim`.
 
-To enable running GUI applications (e.g. QGroundControl, Gazebo) inside Docker on Linux systems, launch the container with the following command:
+As of now, it is *not* recommended that you build and run the Docker image and container using the VSCode `devcontainer` CLI.
+
+1. Build the Docker image for [uli-net-sim](https://github.com/brycethebjorkman/uli-net-sim) and then this repository.
+
+2. Navigate to the `.devcontainer` directory and build the Docker container:
 ```shell
-docker run -u ubuntu --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev/dri:/dev/dri:ro" --name <container name> dalbick/uav-cyber-sim
+cd .devcontainer
+docker build --tag "uav-cyber-sim" .
 ```
 
-VS Code's 'Dev Containers' extension can be used to attach to a running container in order to run the example Jupyter notebooks. 
+3. After the container has been built, launch the container with the following command:
+```shell
+docker run -u ubuntu --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev/dri:/dev/dri:ro" --name uav-cyber-sim -d uav-cyber-sim:latest
+```
+
+4. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
 
 **If you encounter "cannot connect to display" error, run the following on your host system:**
 ```shell
-xhost +local:root
+xhost +local:
 ```
 
 ---
@@ -84,6 +94,3 @@ If you use this simulator, please cite the original paper:
 ```
 
 ---
-
-## Contact
-For questions or collaborations, email [abel.diaz.gonzalez@vanderbilt.edu](mailto:abel.diaz.gonzalez@vanderbilt.edu).
