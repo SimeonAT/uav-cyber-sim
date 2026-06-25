@@ -86,11 +86,17 @@ class Gazebo(Visualizer[GazVehicle]):
             base_models, base_port_in=9002, port_step=10
         )
         updated_world = self._update_world(self.world_path)
+        #
+        # TODO: Change `create_process()` call back to what it was before.
+        #       The function call was modified to show the stdout/stderr output of Gazebo.
+        #
         create_process(
             f"gazebo {updated_world}",
-            visible=False,
+            visible=True,
+            after="bash",
+            title="Gazebo Debug Output",
             env_cmd=ENV_CMD_GAZ,
-            suppress_output=True,
+            suppress_output=False,
         )
         logging.info(
             "🖥️  Gazebo launched for realistic simulation and 3D visualization."
