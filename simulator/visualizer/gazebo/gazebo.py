@@ -87,8 +87,8 @@ class Gazebo(Visualizer[GazVehicle]):
         )
         updated_world = self._update_world(self.world_path)
         #
-        # TODO: Change `create_process()` call back to what it was before.
-        #       The function call was modified to show the stdout/stderr output of Gazebo.
+        # UCI TODO: Change `create_process()` call back to what it was before.
+        #           The function call was modified to show the stdout/stderr output of Gazebo.
         #
         create_process(
             f"gazebo {updated_world}",
