@@ -60,13 +60,19 @@ As of now, it is *not* recommended to build and run the Docker image and contain
 
 1. Build the Docker image for [uli-net-sim](https://github.com/brycethebjorkman/uli-net-sim).
 
-2. Navigate to the `.devcontainer` directory and build the Docker image:
+2. Clone our fork of [`ardupilot_gazebo`](https://github.com/SimeonAT/ardupilot_gazebo/tree/parallel-simulation). Navigate to the forked repository and checkout the commit to the `parallel-simulation` branch:
+```shell
+cd ardupilot_gazebo
+git checkout parallel-simulation
+```
+
+3. Navigate to the `.devcontainer` directory and build the Docker image:
 ```shell
 cd .devcontainer
 docker build --tag "uav-cyber-sim" .
 ```
 
-3. After the image has been built, launch the container with the following command:
+4. After the image has been built, launch the container with the following command:
 ```shell
 docker run -u ubuntu \
   --gpus all \
@@ -77,10 +83,11 @@ docker run -u ubuntu \
   --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
   --volume="/dev/dri:/dev/dri:ro" \
   --volume="[Path to directory containing `uav-cyber-sim` repository]:/home/ubuntu/uav-cyber-sim" \
+  --volume="[Path to directory containing `ardupilot_gazebo` repository]:/home/ubuntu/ardupilot_gazebo" \
   --name uav-cyber-sim -d uav-cyber-sim:latest
 ```
 
-4. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
+5. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
 
 **If you encounter "cannot connect to display" error, run the following on your host system:**
 ```shell
