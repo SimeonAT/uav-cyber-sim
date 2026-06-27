@@ -60,13 +60,13 @@ As of now, it is *not* recommended to build and run the Docker image and contain
 
 1. Build the Docker image for [uli-net-sim](https://github.com/brycethebjorkman/uli-net-sim).
 
-2. Navigate to the `.devcontainer` directory and build the Docker container:
+2. Navigate to the `.devcontainer` directory and build the Docker image:
 ```shell
 cd .devcontainer
 docker build --tag "uav-cyber-sim" .
 ```
 
-3. After the container has been built, launch the container with the following command:
+3. After the image has been built, launch the container with the following command:
 ```shell
 docker run -u ubuntu \
   --gpus all \
