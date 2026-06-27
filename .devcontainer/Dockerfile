@@ -121,7 +121,7 @@ RUN cd qgroundcontrol && \
   touch "QGroundControl.org/QGroundControl Daily.ini"
 
 # INSTALL GAZEBO
-RUN git clone git@github.com:SimeonAT/ardupilot_gazebo.git && \
+RUN git clone https://github.com/SimeonAT/ardupilot_gazebo.git && \
   cd ardupilot_gazebo && \
   git checkout --recurse-submodules parallel-simulation && \
   mkdir build && \
