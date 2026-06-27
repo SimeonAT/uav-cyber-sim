@@ -30,23 +30,20 @@ def create_process(
         env = os.environ.copy()
         env["DISPLAY"] = display_env
 
-        if "SSH_CONNECTION" in env or 'REMOTE_CONTAINERS' in env:
-            return Popen(
-                ["xterm", "-T", title, "-geometry", terminal_geometry, "-e"] + bash_cmd,
-                env=env,
-            )
-        else:
-            return Popen(
-                [
-                    "gnome-terminal",
-                    "--title",
-                    title,
-                    f"--geometry={terminal_geometry}",
-                    "--",
-                ]
-                + bash_cmd,
-                env=env,
-            )
+        # UCI TODO: Change the code in the function body back to what it was before in the
+        #           original version of `uav-cyber-sim` after fixing bugs.
+        #
+        return Popen(
+            [
+                "gnome-terminal",
+                "--title",
+                title,
+                f"--geometry={terminal_geometry}",
+                "--",
+            ]
+            + bash_cmd,
+            env=env,
+        )
     elif visible:
         raise OSError("Unsupported OS for visible terminal mode.")
 
