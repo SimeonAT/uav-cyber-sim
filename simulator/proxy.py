@@ -42,9 +42,10 @@ RID_INTERVAL = int(1_000_000 / REMOTE_ID_FREQUENCY)
 
 def main() -> None:
     """Parse arguments and launch the MAVLink proxy."""
+    print("Hello World! Starting the Proxy!")
     system_id, port_offset, verbose = parse_arguments()
     setup_logging(f"proxy_{system_id}", verbose=verbose, console_output=True)
-    start_proxy(system_id, port_offset)
+    # start_proxy(system_id, port_offset)
 
 
 def start_proxy(sysid: int, port_offset: int) -> None:
