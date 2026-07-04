@@ -17,3 +17,6 @@ eeprom*.bin
 # experimental code
 1-auto_mode2.ipynb
 test.*
+
+# Gazebo world models
+simulator/gazebo/worlds/*
