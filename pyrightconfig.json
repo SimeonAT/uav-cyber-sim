@@ -1,7 +1,8 @@
 {
-    "typeCheckingMode": "strict",
-    "reportMissingTypeStubs": false,
-    "ignoreMissingImports": [
-        "pymavlink"
-    ]
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": false,
+  "reportUnusedImport": "none",
+  "ignoreMissingImports": [
+    "pymavlink"
+  ]
 }
