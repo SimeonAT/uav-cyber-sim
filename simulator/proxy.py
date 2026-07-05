@@ -197,7 +197,7 @@ class MessageRouter(threading.Thread):
             #           DON'T FORGET to remove these line when working on adding PX4.
             #
             else:
-                logging.info(f"No response from ArduPilot after waiting {timeout} seconds.")
+                logging.info(f"Ending simulation when ArduPilot is not present after {timeout} seconds.")
                 logging.info("Going to end simulation.")
                 self.stop_event.set()
 
