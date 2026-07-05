@@ -229,24 +229,23 @@ class Oracle:  # UAVMonitor
 
     def wait_gcs_done(self, gcs_name: str):
         """Wait for a DONE message from one GCS, then stop all UAV threads."""
-        while True:
-            try:
-                logging.info(f"Oracle stuck waiting for GCS {gcs_name} to `recv_string`.")
-                time.sleep(5)
-                msg = self.gcs_socks[gcs_name].recv_string(flags=zmq.NOBLOCK)
-                if msg == "DONE":
-                    logging.info(f"Received DONE from GCS {gcs_name}")
-                    for sysid in self.gcs_sysids[gcs_name]:
-                        self.rid_in_threads[sysid].join()
-                        self.rid_out_threads[sysid].join()
-                    break
-            except zmq.Again:
-                # No message available, this is expected
-                continue
-            except Exception as e:
-                logging.error(f"Error receiving from GCS {gcs_name}: {e}")
-                continue
-            time.sleep(0.01)
+        # while True:
+        #     try:
+        #         msg = self.gcs_socks[gcs_name].recv_string(flags=zmq.NOBLOCK)
+        #         if msg == "DONE":
+        #             logging.info(f"Received DONE from GCS {gcs_name}")
+        #             for sysid in self.gcs_sysids[gcs_name]:
+        #                 self.rid_in_threads[sysid].join()
+        #                 self.rid_out_threads[sysid].join()
+        #             break
+        #     except zmq.Again:
+        #         # No message available, this is expected
+        #         continue
+        #     except Exception as e:
+        #         logging.error(f"Error receiving from GCS {gcs_name}: {e}")
+        #         continue
+        #     time.sleep(0.01)
+        return
 
     def update_rid(self, sysid: int):
         """Receive Remote ID messages from one UAV and update the store."""
