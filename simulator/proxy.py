@@ -176,7 +176,8 @@ class MessageRouter(threading.Thread):
     def run(self):
         """Continuously receive messages and dispatch them until stopped."""
         while not self.stop_event.is_set():
-            msg = self.source.recv_match(blocking=True, timeout=0.1)
+            timeout = 0.1
+            msg = self.source.recv_match(blocking=True, timeout=timeout)
             if msg and not self.stop_event.is_set():
                 # logging.debug(f"UAV ({self.sysid}): Received {msg}")
                 if (
@@ -189,6 +190,16 @@ class MessageRouter(threading.Thread):
                     break
 
                 self.dispatch_message(msg)
+              
+            # UCI TODO: Ending simulation after waiting `timeout` seconds. This is to test
+            #           that how I can stop end a simulation when ArduPilot is removed.
+            # 
+            #           DON'T FORGET to remove these line when working on adding PX4.
+            #
+            else:
+                logging.info(f"No response from ArduPilot after waiting {timeout} seconds.")
+                logging.info("Going to end simulation.")
+                self.stop_event.set()
 
     def dispatch_message(self, msg: mavlink.MAVLink_message):
         """Send a message to all targets with timestamp and sender."""
