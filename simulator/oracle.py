@@ -231,6 +231,8 @@ class Oracle:  # UAVMonitor
         """Wait for a DONE message from one GCS, then stop all UAV threads."""
         while True:
             try:
+                logging.info(f"Oracle stuck waiting for GCS {gcs_name} to `recv_string`.")
+                time.sleep(5)
                 msg = self.gcs_socks[gcs_name].recv_string(flags=zmq.NOBLOCK)
                 if msg == "DONE":
                     logging.info(f"Received DONE from GCS {gcs_name}")
