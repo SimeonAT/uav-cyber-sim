@@ -218,8 +218,8 @@ class Oracle:  # UAVMonitor
         #     thread.start()
         # for thread in self.rid_out_threads.values():
         #     thread.start()
-        for thread in self.gcs_threads.values():
-            thread.start()
+        # for thread in self.gcs_threads.values():
+        #     thread.start()
 
         while any(thread.is_alive() for thread in self.gcs_threads.values()):
             time.sleep(0.1)
@@ -229,23 +229,22 @@ class Oracle:  # UAVMonitor
 
     def wait_gcs_done(self, gcs_name: str):
         """Wait for a DONE message from one GCS, then stop all UAV threads."""
-        # while True:
-        #     try:
-        #         msg = self.gcs_socks[gcs_name].recv_string(flags=zmq.NOBLOCK)
-        #         if msg == "DONE":
-        #             logging.info(f"Received DONE from GCS {gcs_name}")
-        #             for sysid in self.gcs_sysids[gcs_name]:
-        #                 self.rid_in_threads[sysid].join()
-        #                 self.rid_out_threads[sysid].join()
-        #             break
-        #     except zmq.Again:
-        #         # No message available, this is expected
-        #         continue
-        #     except Exception as e:
-        #         logging.error(f"Error receiving from GCS {gcs_name}: {e}")
-        #         continue
-        #     time.sleep(0.01)
-        return
+        while True:
+            try:
+                msg = self.gcs_socks[gcs_name].recv_string(flags=zmq.NOBLOCK)
+                if msg == "DONE":
+                    logging.info(f"Received DONE from GCS {gcs_name}")
+                    for sysid in self.gcs_sysids[gcs_name]:
+                        self.rid_in_threads[sysid].join()
+                        self.rid_out_threads[sysid].join()
+                    break
+            except zmq.Again:
+                # No message available, this is expected
+                continue
+            except Exception as e:
+                logging.error(f"Error receiving from GCS {gcs_name}: {e}")
+                continue
+            time.sleep(0.01)
 
     def update_rid(self, sysid: int):
         """Receive Remote ID messages from one UAV and update the store."""
