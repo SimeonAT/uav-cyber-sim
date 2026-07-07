@@ -132,6 +132,21 @@ RUN git clone https://github.com/SimeonAT/ardupilot_gazebo.git && \
 RUN echo 'source /usr/share/gazebo/setup.sh' >> ~/.profile
 RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models' >> ~/.profile
 
+# INSTALL PX4
+RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive -b v1.14.4 && \
+  cd PX4-Autopilot && \
+  ./Tools/setup/ubuntu.sh --no-nuttx --no-sim-tools
+
+RUN git clone --recursive https://github.com/PX4/PX4-SITL_gazebo-classic.git && \
+  cd PX4-SITL_gazebo-classic && \
+  mkdir build && \
+  cd build && \
+  cmake .. && \
+  make -j$(nproc) && \
+  sudo make install
+RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models:~/PX4-SITL_gazebo-classic/models:$GAZEBO_MODEL_PATH' >> ~/.profile
+RUN echo 'export GAZEBO_PLUGIN_PATH=~/PX4-SITL_gazebo-classic/build:$GAZEBO_PLUGIN_PATH' >> ~/.profile
+
 # INSTALL MINICONDA
 RUN mkdir ~/miniconda3 && \
   wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh && \
