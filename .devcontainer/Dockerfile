@@ -142,15 +142,10 @@ RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
   libopencv-dev \
   && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
-RUN git clone --recursive https://github.com/PX4/PX4-SITL_gazebo-classic.git && \
-  cd PX4-SITL_gazebo-classic && \
-  mkdir build && \
-  cd build && \
-  cmake .. && \
-  make -j$(nproc) && \
-  sudo make install
-RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models:~/PX4-SITL_gazebo-classic/models:$GAZEBO_MODEL_PATH' >> ~/.profile
-RUN echo 'export GAZEBO_PLUGIN_PATH=~/PX4-SITL_gazebo-classic/build:$GAZEBO_PLUGIN_PATH' >> ~/.profile
+RUN cd ~/PX4-Autopilot && \
+  timeout --preserve-status 350 make px4_sitl gazebo-classic; \
+  test -f build/px4_sitl_default/bin/px4 && \
+  find build/px4_sitl_default/build_gazebo-classic -name "libgazebo_mavlink_interface.so" | grep -q .
 
 # INSTALL MINICONDA
 RUN mkdir ~/miniconda3 && \
