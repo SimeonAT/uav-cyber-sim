@@ -138,6 +138,10 @@ RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive -b v1.14.4 &&
   sed -i "s/matplotlib>=3.0.\*/matplotlib>=3.0/" Tools/setup/requirements.txt && \
   ./Tools/setup/ubuntu.sh --no-nuttx --no-sim-tools
 
+RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
+  libopencv-dev \
+  && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+
 RUN git clone --recursive https://github.com/PX4/PX4-SITL_gazebo-classic.git && \
   cd PX4-SITL_gazebo-classic && \
   mkdir build && \
