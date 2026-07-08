@@ -142,17 +142,12 @@ RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
   libopencv-dev \
   && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
-# The `make px4_sitl` command not only builds PX4 but launches the PXH shell afterwards,
-# which causes the Dockerfile install to hang forever. The `--preserve-status 350` argument
-# times out and moves on after 350 seconds. The installation is assumed to expected to complete
-# within the 350 second period.
-#
-# If you are getting errors at this stage, you may need to adjust the `--preserve-status` flag
-# to a time >= 350 seconds, as it may be the case that the PX4 installation may take longer
-# depending on the device that you are using.
-#
+# Builds PX4 firmware and the Gazebo Classic plugin (generating the MAVLink
+# headers the plugin needs) without launching the simulator or the pxh> shell.
+# https://discuss.px4.io/t/dont-run-1-with-gz-doesnt-work/32124
+# 
 RUN cd ~/PX4-Autopilot && \
-  timeout --preserve-status 350 make px4_sitl gazebo-classic; \
+  DONT_RUN=1 make px4_sitl_default gazebo-classic && \
   test -f build/px4_sitl_default/bin/px4 && \
   find build/px4_sitl_default/build_gazebo-classic -name "libgazebo_mavlink_interface.so" | grep -q .
 
