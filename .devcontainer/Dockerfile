@@ -147,6 +147,7 @@ RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
 # https://discuss.px4.io/t/dont-run-1-with-gz-doesnt-work/32124
 # 
 RUN cd ~/PX4-Autopilot && \
+  PATH=$(echo $PATH | sed 's|/usr/lib/ccache:/opt/Qt/5.15.2/gcc_64/bin:||') \
   DONT_RUN=1 make px4_sitl_default gazebo-classic && \
   test -f build/px4_sitl_default/bin/px4 && \
   find build/px4_sitl_default/build_gazebo-classic -name "libgazebo_mavlink_interface.so" | grep -q .
