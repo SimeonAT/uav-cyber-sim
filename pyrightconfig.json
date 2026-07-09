@@ -7,5 +7,13 @@
   /* UCI TODO: Remove these PyLance ignore error exceptions after
                ArduPilot has been replaced with PX4. */
   "reportUnusedImport": "none",
-  "reportUnusedVariable": "none"
+  "reportUnusedVariable": "none",
+  /**
+     UCI NOTE: These error exceptions have been added to prevent false positive
+               type errors from being shown when using PyMavLink.
+  **/
+  "reportUnknownMemberType": "none",
+  "reportAttributeAccessIssue": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownVariableType": "none"
 }
