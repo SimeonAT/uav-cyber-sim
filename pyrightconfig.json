@@ -1,7 +1,11 @@
 {
-    "typeCheckingMode": "strict",
-    "reportMissingTypeStubs": false,
-    "ignoreMissingImports": [
-        "pymavlink"
-    ]
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": false,
+  "ignoreMissingImports": [
+    "pymavlink"
+  ],
+  /* UCI TODO: Remove these PyLance ignore error exceptions after
+               ArduPilot has been replaced with PX4. */
+  "reportUnusedImport": "none",
+  "reportUnusedVariable": "none"
 }

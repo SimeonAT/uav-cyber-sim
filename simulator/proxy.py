@@ -43,19 +43,23 @@ RID_INTERVAL = int(1_000_000 / REMOTE_ID_FREQUENCY)
 def main() -> None:
     """Parse arguments and launch the MAVLink proxy."""
     system_id, port_offset, verbose = parse_arguments()
-    setup_logging(f"proxy_{system_id}", verbose=verbose, console_output=True)
+
+    # UCI TODO: Set verbosity from debug level `2` back to variable value `verbose`.
+    setup_logging(f"proxy_{system_id}", verbose=2, console_output=True)
+    logging.debug("Hello World! Starting the Proxy!")
+
     start_proxy(system_id, port_offset)
 
 
 def start_proxy(sysid: int, port_offset: int) -> None:
     """Start bidirectional proxy for a given UAV system_id."""
-    ap_conn = create_tcp_conn(
-        base_port=BasePort.ARP,
-        offset=port_offset,
-        role="client",
-        src_sysid=sysid,
-        src_compid=141,
-    )
+    # ap_conn = create_tcp_conn(
+    #     base_port=BasePort.ARP,
+    #     offset=port_offset,
+    #     role="client",
+    #     src_sysid=sysid,
+    #     src_compid=141,
+    # )
     lg_conn = create_tcp_conn(
         base_port=BasePort.LOG,
         offset=port_offset,
@@ -63,11 +67,12 @@ def start_proxy(sysid: int, port_offset: int) -> None:
         src_sysid=sysid,
         src_compid=141,
     )
+
     ## ASK NED POSITION for REMOTE ID
-    ask_msg(ap_conn, MsgID.GLOBAL_POSITION_INT, interval=RID_INTERVAL)
-    request_sensor_streams(
-        ap_conn, stream_ids=DATA_STREAM_IDS, rate_hz=DATA_STREAM_FREQUENCY
-    )
+    # ask_msg(ap_conn, MsgID.GLOBAL_POSITION_INT, interval=RID_INTERVAL)
+    # request_sensor_streams(
+    #     ap_conn, stream_ids=DATA_STREAM_IDS, rate_hz=DATA_STREAM_FREQUENCY
+    # )
 
     ap_queue = Queue[tuple[str, float, mavlink.MAVLink_message]]()
     lg_queue = Queue[tuple[str, float, mavlink.MAVLink_message]]()
@@ -77,14 +82,14 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     stop_event = threading.Event()
 
     # ARP → LOG
-    router1 = MessageRouter(
-        source=ap_conn,
-        targets=[lg_queue],  # oc_queue,cs_queue,
-        labels=["⬅️ LOG ← ARP"],  # "⬅️ ORC ← ARP","⬅️ GCS ← ARP"
-        sysid=sysid,
-        sender="ARP",
-        stop_event=stop_event,
-    )
+    # router1 = MessageRouter(
+    #     source=ap_conn,
+    #     targets=[lg_queue],  # oc_queue,cs_queue,
+    #     labels=["⬅️ LOG ← ARP"],  # "⬅️ ORC ← ARP","⬅️ GCS ← ARP"
+    #     sysid=sysid,
+    #     sender="ARP",
+    #     stop_event=stop_event,
+    # )
 
     # LOG → ARP
     router2 = MessageRouter(
@@ -105,13 +110,13 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     sensor_log_files: dict[str, TextIO] = {}
     logging.debug(f"Proxy {sysid}: CSV log file created")
     try:
-        router1.start()
+        # router1.start()
         router2.start()
 
         while not stop_event.is_set():
             try:
-                while not ap_queue.empty() and not stop_event.is_set():
-                    write_and_log_message(ap_queue, ap_conn, log_writer, "ARP")
+                # while not ap_queue.empty() and not stop_event.is_set():
+                #     write_and_log_message(ap_queue, ap_conn, log_writer, "ARP")
 
                 while not lg_queue.empty() and not stop_event.is_set():
                     record = write_and_log_message(lg_queue, lg_conn, log_writer, "LOG")
@@ -137,11 +142,11 @@ def start_proxy(sysid: int, port_offset: int) -> None:
                 logging.error(f"Unexpected error (sysid {sysid}): {e}")
     finally:
         ## This is to stop the NED POSITION REQUEST
-        stop_msg(ap_conn, MsgID.LOCAL_POSITION_NED)
-        router1.join()
+        # stop_msg(ap_conn, MsgID.LOCAL_POSITION_NED)
+        # router1.join()
         router2.join()
         log_file.close()
-        ap_conn.close()
+        # ap_conn.close()
         lg_conn.close()
         rid_sock.close(linger=0)
         zmq_ctx.term()
@@ -171,7 +176,8 @@ class MessageRouter(threading.Thread):
     def run(self):
         """Continuously receive messages and dispatch them until stopped."""
         while not self.stop_event.is_set():
-            msg = self.source.recv_match(blocking=True, timeout=0.1)
+            timeout = 1
+            msg = self.source.recv_match(blocking=True, timeout=timeout)
             if msg and not self.stop_event.is_set():
                 # logging.debug(f"UAV ({self.sysid}): Received {msg}")
                 if (
@@ -184,6 +190,16 @@ class MessageRouter(threading.Thread):
                     break
 
                 self.dispatch_message(msg)
+              
+            # UCI TODO: Ending simulation after waiting `timeout` seconds. This is to test
+            #           that how I can stop end a simulation when ArduPilot is removed.
+            # 
+            #           DON'T FORGET to remove these line when working on adding PX4.
+            #
+            else:
+                logging.info(f"Ending simulation when ArduPilot is not present after {timeout} seconds.")
+                logging.info("Going to end simulation.")
+                self.stop_event.set()
 
     def dispatch_message(self, msg: mavlink.MAVLink_message):
         """Send a message to all targets with timestamp and sender."""

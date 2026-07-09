@@ -93,8 +93,8 @@ class GCS(UAVMonitor):
     ###
     def run(self):
         """Run the GCS monitoring loop until all UAVs complete their missions."""
-        with futures.ThreadPoolExecutor() as executor:
-            executor.map(self._monitor_uav, self.sysids)
+        # with futures.ThreadPoolExecutor() as executor:
+        #     executor.map(self._monitor_uav, self.sysids)
 
         logging.info("All UAVs assigned have completed their missions")
         self.orc_sock.send_string("DONE")  # type: ignore
@@ -153,15 +153,15 @@ class GCS(UAVMonitor):
         )  # "exit"
         logging.debug(f"Proxy for vehicle {sysid} launched (PID {p.pid})")
 
-        p = create_process(
-            uav_config["ardupilot_cmd"],
-            after="exec bash",
-            visible="launcher" in self.terminals,
-            suppress_output="launcher" in self.suppress,
-            title=f"ArduPilot SITL Launcher: Vehicle {sysid}",
-            env_cmd=ENV_CMD_ARP,
-        )  # "exit"
-        logging.debug(f"ArduPilot SITL vehicle {sysid} launched (PID {p.pid})")
+        # p = create_process(
+        #     uav_config["ardupilot_cmd"],
+        #     after="exec bash",
+        #     visible="launcher" in self.terminals,
+        #     suppress_output="launcher" in self.suppress,
+        #     title=f"ArduPilot SITL Launcher: Vehicle {sysid}",
+        #     env_cmd=ENV_CMD_ARP,
+        # )  # "exit"
+        # logging.debug(f"ArduPilot SITL vehicle {sysid} launched (PID {p.pid})")
 
         conn = create_udp_conn(
             base_port=BasePort.GCS,
