@@ -4,5 +4,4 @@ from pymavlink import mavutil
 conn = mavutil.mavlink_connection('udpin:localhost:14540')
 
 conn.wait_heartbeat()
-
 print(f"Heartbeat from system {conn.target_system} component {conn.target_component})")
