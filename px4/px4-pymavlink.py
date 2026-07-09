@@ -9,5 +9,3 @@ the_connection.wait_heartbeat()
 print("Heartbeat from system (system %u component %u)" % (
   the_connection.target_system, 
   the_connection.target_component))
-
-# Once connected, use 'the_connection' to get and send messages
