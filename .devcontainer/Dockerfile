@@ -199,9 +199,9 @@ COPY --from=netsim --chown=ubuntu:ubuntu /usr/uli-net-sim /usr/uli-net-sim
 USER ubuntu
 WORKDIR /home/ubuntu/uav-cyber-sim
 
+RUN echo "conda activate uav-cyber-sim" >> ~/.bashrc
+
 ENTRYPOINT ["tail","-f","/dev/null"]
-
-
 
 # # INSTALL ULI NET SIM
 # FROM uli-net-sim:latest AS netsim
