@@ -15,5 +15,7 @@
   "reportUnknownMemberType": "none",
   "reportAttributeAccessIssue": "none",
   "reportUnknownArgumentType": "none",
-  "reportUnknownVariableType": "none"
+  "reportUnknownVariableType": "none",
+  "reportMissingParameterType": "none",
+  "reportUnknownParameterType": "none"
 }
