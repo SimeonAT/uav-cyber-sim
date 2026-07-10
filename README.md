@@ -86,6 +86,7 @@ docker run -u ubuntu \
   --volume="[Path to directory containing `ardupilot_gazebo` repository]:/home/ubuntu/ardupilot_gazebo" \
   --name uav-cyber-sim -d uav-cyber-sim:latest
 ```
+**Do not** launch the container through SSH; otherwise, Gazebo will not be able to render. You must run this command on the same device that is running `uav-cyber-sim`, and hence, the Gazebo simulation environment.
 
 5. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
 
