@@ -8,6 +8,3 @@ conn = mavutil.mavlink_connection(f'udpin:localhost:{ONBOARD_PORT}')
 
 conn.wait_heartbeat()
 print(f"Heartbeat from system {conn.target_system} component {conn.target_component})")
-
-print("Sending all message types")
-mavtest.generate_outputs(conn.mav)

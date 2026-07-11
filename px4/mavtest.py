@@ -1,6 +1,7 @@
 """
-All of the source code in this file is from the `examples/mavtest.py` file in the PyMavLink
-GitHub repository: https://github.com/ArduPilot/pymavlink/blob/master/examples/mavtest.py
+This source file is a slightly modified version of the `examples/mavtest.py` source file in
+the PyMavLink GitHub repository:
+https://github.com/ArduPilot/pymavlink/blob/master/examples/mavtest.py
 
 Generate a message using different MAVLink versions, put in a buffer and then read from it.
 """
@@ -58,12 +59,13 @@ def test_protocol(mavlink, signing=False):
     # print out the fields
     print(m2)
 
+# Modified the source code to not run and print out tests when importing this Python file.
+if __name__ == "__main__":
+  print("Testing mavlink1\n")
+  test_protocol(mavlink1)
 
-print("Testing mavlink1\n")
-test_protocol(mavlink1)
+  print("\nTesting mavlink2\n")
+  test_protocol(mavlink2)
 
-print("\nTesting mavlink2\n")
-test_protocol(mavlink2)
-
-print("\nTesting mavlink2 with signing\n")
-test_protocol(mavlink2, True)
+  print("\nTesting mavlink2 with signing\n")
+  test_protocol(mavlink2, True)
