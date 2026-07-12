@@ -11,7 +11,7 @@ class Mission_Item:
     self.seq = i
 
     # Use Global Latitude and Logitude for position data
-    self.frame = mavutil.matvlink.MAX_FRAME_GLOBAL_RELATIVE_ALT
+    self.frame = mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT
 
     #Move to the waypoint
     self.command = mavutil.mavlink.MAV_CMD_NAV_WAYPOINT
@@ -21,7 +21,7 @@ class Mission_Item:
     self.param1 = 0.0
     self.param2 = 2.00
     self.param3 = 20.00
-    self.paran4 = math.nan
+    self.param4 = math.nan
     self.param5 = x
     self.param6 = y
     self.param7 = z
@@ -62,7 +62,7 @@ def upload_mission(the_connection, mission_items):
 
   for waypoint in mission_items:
     print("-- Creating a Waypoint")
-    the_connection.mav_mission_item_send(
+    the_connection.mav.mission_item_send(
       the_connection.target_system,          # Target System
       the_connection.target_component,       # Target Component
       waypoint.seq,                          # Sequence
@@ -80,7 +80,7 @@ def upload_mission(the_connection, mission_items):
       waypoint.mission_type                  # Mission Type
     )
   
-    if waypoint in mission_items[n - 1]:
+    if waypoint != mission_items[n - 1]:
       ack(the_connection, "MISSION_REQUEST")
   
   ack(the_connection, "MISSION_ACK")
