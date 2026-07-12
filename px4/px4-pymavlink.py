@@ -30,7 +30,7 @@ if __name__ == "__main__":
   ack(conn, "COMMAND_ACK")
 
   # Takeoff command
-  send_command(conn, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  0, 0, 0, 0, nan, 0, 0, 10)
+  send_command(conn, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  0, 0, 0, 0, nan, nan, nan, 10)
   ack(conn, "COMMAND_ACK")
 
   # while True:
