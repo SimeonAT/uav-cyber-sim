@@ -125,8 +125,8 @@ if __name__ == "__main__":
 
   mission_waypoints = []
   mission_waypoints.append(Mission_Item(0, 0, 42, -83, 10))
-  mission_waypoints.append(Mission_Item(0, 0, 43, -90, 10))
-  mission_waypoints.append(Mission_Item(0, 0, 42, -83, 5))
+  mission_waypoints.append(Mission_Item(1, 0, 43, -90, 10))
+  mission_waypoints.append(Mission_Item(2, 0, 42, -83, 5))
 
   upload_mission(the_connection, mission_waypoints)
   
