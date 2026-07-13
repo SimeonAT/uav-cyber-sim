@@ -196,6 +196,17 @@ RUN apt-get update && \
 
 COPY --from=netsim --chown=ubuntu:ubuntu /usr/uli-net-sim /usr/uli-net-sim
 
+# INSTALL WIRESHARK
+RUN apt-get update && apt-get install --yes --no-install-recommends \
+  libcap2-bin \
+  wireshark \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* && \
+  groupadd -f wireshark && \
+  usermod -aG wireshark ubuntu && \
+  chgrp wireshark /usr/bin/dumpcap && \
+  chmod 750 /usr/bin/dumpcap && \
+  setcap cap_net_raw,cap_net_admin+eip /usr/bin/dumpcap
+
 USER ubuntu
 WORKDIR /home/ubuntu/uav-cyber-sim
 
