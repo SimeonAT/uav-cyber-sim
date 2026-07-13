@@ -1,5 +1,4 @@
 from pymavlink import mavutil
-import mavtest
 
 import time
 from math import nan
