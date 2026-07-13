@@ -99,6 +99,20 @@ xhost +local:
 
 ---
 
+## Wireshark and MAVLink
+
+If you would like to inspect MAVLink packets on Wireshark:
+
+1. Navigate to the `px4` directory, and run `make wireshark`. This will set up the [MAVLink Wireshark Lua plugin](https://mavlink.io/en/guide/wireshark.html).
+
+2. Start up by Wireshark by running the `wireshark` command in the container. The Wirshark GUI will then be displayed on your host system.
+
+Similarly, **if the Wirshark user interface does not appear, run the following on your host system:**
+```shell
+xhost +local:
+```
+---
+
 ## Citation
 If you use this simulator, please cite the original paper:
 
