@@ -76,6 +76,8 @@ docker build --tag "uav-cyber-sim" .
 ```shell
 docker run -u ubuntu \
   --gpus all \
+  --cap-add=NET_ADMIN \
+  --cap-add=NET_RAW \
   -e NVIDIA_DRIVER_CAPABILITIES=all \
   -e __NV_PRIME_RENDER_OFFLOAD=1 \
   -e __GLX_VENDOR_LIBRARY_NAME=nvidia \
