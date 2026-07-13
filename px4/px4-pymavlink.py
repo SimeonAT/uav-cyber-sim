@@ -8,9 +8,9 @@ SLEEP_TIME_SECS = 1
 
 def send_command(connection, command, confirmation, param1, param2, param3,
                  param4, param5, param6, param7):
-  return conn.mav.command_long_send(connection.target_system, connection.target_component,
-                                    command, confirmation, param1, param2, param3, param4,
-                                    param5, param6, param7)
+  return connection.mav.command_long_send(connection.target_system, connection.target_component,
+                                          command, confirmation, param1, param2, param3, param4,
+                                          param5, param6, param7)
 
 def print_message(connection, message_names=None):
   message = connection.recv_match(type=message_names, blocking=True)
