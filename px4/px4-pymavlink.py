@@ -25,7 +25,7 @@ class Waypoint:
     self.param7 = z
     return
 
-def print_message(connection, message_names=None):
+def get_message(connection, message_names=None):
   message = connection.recv_match(type=message_names, blocking=True, timeout=TIMEOUT)
   if message:
     print(message)
@@ -38,7 +38,7 @@ def upload_mission(connection, waypoints):
                                     len(waypoints))
 
   for waypoint in waypoints:
-    print_message(connection, "MISSION_REQUEST")
+    get_message(connection, "MISSION_REQUEST")
     connection.mav.mission_item_send(
       connection.target_system,              # Target System
       connection.target_component,           # Target Component
@@ -57,7 +57,7 @@ def upload_mission(connection, waypoints):
       waypoint.mission_type                  # Mission Type
     )
   
-  print_message(connection, "MISSION_ACK")
+  get_message(connection, "MISSION_ACK")
   return
 
 def send_command(connection, command, confirmation, param1, param2, param3,
@@ -72,10 +72,12 @@ if __name__ == "__main__":
   conn.wait_heartbeat()
   print(f"Heartbeat from system {conn.target_system} component {conn.target_component}")
 
-  # Print the starting coordinates of the drone.
+  # Get the starting coordinates of the drone.
   send_command(conn, mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE, 0,
                mavutil.mavlink.MAVLINK_MSG_ID_HOME_POSITION, 0, 0, 0, 0, 0, 0)
-  print_message(conn, "HOME_POSITION")
+  home_position = get_message(conn, "HOME_POSITION")
+  if home_position is None:
+    raise Exception("Failed to get starting position of Drone")
 
   waypoints = []
   waypoints.append(Waypoint(0, 0, 42, -83, 10))
@@ -85,12 +87,12 @@ if __name__ == "__main__":
   upload_mission(conn, waypoints)
 
   send_command(conn, mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
-  print_message(conn, "COMMAND_ACK")
+  get_message(conn, "COMMAND_ACK")
 
   send_command(conn, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  0, 0, 0, 0, nan, nan, nan, 50)
-  print_message(conn, "COMMAND_ACK")
+  get_message(conn, "COMMAND_ACK")
 
   time.sleep(10)
 
   send_command(conn, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0)
-  print_message(conn, "COMMAND_ACK")
+  get_message(conn, "COMMAND_ACK")
