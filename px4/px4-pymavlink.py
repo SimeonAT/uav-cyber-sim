@@ -5,7 +5,7 @@ from math import nan
 
 ONBOARD_PORT = 14540
 SLEEP_TIME_SECS = 1
-TIMEOUT = 1
+TIMEOUT = None
 
 class Waypoint:
   def __init__(self, seq, current, x, y, z):
