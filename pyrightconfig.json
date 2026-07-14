@@ -17,5 +17,6 @@
   "reportUnknownArgumentType": "none",
   "reportUnknownVariableType": "none",
   "reportMissingParameterType": "none",
-  "reportUnknownParameterType": "none"
+  "reportUnknownParameterType": "none",
+  "reportUnknownLambdaType": "none"
 }

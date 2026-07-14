@@ -13,7 +13,7 @@ class Mission_Item:
     # Use Global Latitude and Logitude for position data
     self.frame = mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT
 
-    #Move to the waypoint
+    # Move to the waypoint
     self.command = mavutil.mavlink.MAV_CMD_NAV_WAYPOINT
 
     self.current = current
@@ -26,7 +26,7 @@ class Mission_Item:
     self.param6 = y
     self.param7 = z
 
-     #The MAV_MISSION_TYPE value for MAV_MISSION_TYPE_MISSION
+    # The MAV_MISSION_TYPE value for MAV_MISSION_TYPE_MISSION
     self.mission_type = 0
     return
 
@@ -68,7 +68,7 @@ def upload_mission(the_connection, mission_items):
       waypoint.seq,                          # Sequence
       waypoint.frame,                        # Frame
       waypoint.command,                      # Command
-      waypoint.current,                      # Curent
+      waypoint.current,                      # Current
       waypoint.auto,                         # Autocontinue
       waypoint.param1,                       # Hold Time
       waypoint.param2,                       # Accept Radius
