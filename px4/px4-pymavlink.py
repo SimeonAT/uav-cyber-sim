@@ -10,7 +10,7 @@ TIMEOUT = None
 class Waypoint:
   def __init__(self, seq, current, x, y, z):
     self.seq = seq
-    self.frame = mavutil.mavlink.MAV_FRAME_LOCAL_ENU
+    self.frame = mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT
     self.command = mavutil.mavlink.MAV_CMD_NAV_WAYPOINT
     self.mission_type = 0
 
@@ -36,9 +36,9 @@ def get_message(connection, message_names=None):
 def upload_mission(connection, waypoints):
   connection.mav.mission_count_send(connection.target_system, connection.target_component,
                                     len(waypoints))
+  get_message(connection, "MISSION_REQUEST")
 
   for waypoint in waypoints:
-    get_message(connection, "MISSION_REQUEST")
     connection.mav.mission_item_send(
       connection.target_system,              # Target System
       connection.target_component,           # Target Component
@@ -51,11 +51,12 @@ def upload_mission(connection, waypoints):
       waypoint.param2,                       # Accept Radius
       waypoint.param3,                       # Pass Radius
       waypoint.param4,                       # Yaw
-      waypoint.param5,                       # Local X
-      waypoint.param6,                       # Local Y
-      waypoint.param7,                       # Local Z
+      waypoint.param5,                       # Local X / Latitude
+      waypoint.param6,                       # Local Y / Longitude
+      waypoint.param7,                       # Local Z / Altitude
       waypoint.mission_type                  # Mission Type
     )
+    get_message(connection, "MISSION_REQUEST")
   
   get_message(connection, "MISSION_ACK")
   return
@@ -75,14 +76,14 @@ if __name__ == "__main__":
   # Get the starting coordinates of the drone.
   send_command(conn, mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE, 0,
                mavutil.mavlink.MAVLINK_MSG_ID_HOME_POSITION, 0, 0, 0, 0, 0, 0)
-  home_position = get_message(conn, "HOME_POSITION")
-  if home_position is None:
+  home = get_message(conn, "HOME_POSITION")
+  if home is None:
     raise Exception("Failed to get starting position of Drone")
 
   waypoints = []
-  waypoints.append(Waypoint(0, 0, 42, -83, 10))
-  waypoints.append(Waypoint(1, 0, 43, -90, 10))
-  waypoints.append(Waypoint(2, 0, 42, -83, 5))
+  waypoints.append(Waypoint(0, 0, home.x + 0.000001, home.y, home.z + 10))
+  waypoints.append(Waypoint(1, 0, home.x + 0.000001, home.y + 0.0000002, home.z + 10))
+  waypoints.append(Waypoint(2, 0, home.x + 0.000001, home.y + 0.000003, home.z + 10))
 
   upload_mission(conn, waypoints)
 
