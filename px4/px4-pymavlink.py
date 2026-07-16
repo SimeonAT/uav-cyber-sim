@@ -7,6 +7,8 @@ ONBOARD_PORT = 14540
 SLEEP_TIME_SECS = 1
 TIMEOUT = None
 
+E7ToDeg = lambda e7 : e7 / 10**7
+
 class Waypoint:
   def __init__(self, seq, current, x, y, z):
     self.seq = seq
@@ -38,7 +40,8 @@ def upload_mission(connection, waypoints):
                                     len(waypoints))
   get_message(connection, "MISSION_REQUEST")
 
-  for waypoint in waypoints:
+  for i in range(len(waypoints)):
+    waypoint = waypoints[i]
     connection.mav.mission_item_send(
       connection.target_system,              # Target System
       connection.target_component,           # Target Component
@@ -56,7 +59,9 @@ def upload_mission(connection, waypoints):
       waypoint.param7,                       # Local Z / Altitude
       waypoint.mission_type                  # Mission Type
     )
-    get_message(connection, "MISSION_REQUEST")
+
+    if i < len(waypoints) - 1:
+      get_message(connection, "MISSION_REQUEST")
   
   get_message(connection, "MISSION_ACK")
   return
@@ -81,9 +86,9 @@ if __name__ == "__main__":
     raise Exception("Failed to get starting position of Drone")
 
   waypoints = []
-  waypoints.append(Waypoint(0, 0, home.x + 0.000001, home.y, home.z + 10))
-  waypoints.append(Waypoint(1, 0, home.x + 0.000001, home.y + 0.0000002, home.z + 10))
-  waypoints.append(Waypoint(2, 0, home.x + 0.000001, home.y + 0.000003, home.z + 10))
+  waypoints.append(
+    Waypoint(0, 0, E7ToDeg(home.latitude), E7ToDeg(home.longitude), home.altitude + 0.0000000001)
+  )
 
   upload_mission(conn, waypoints)
 
