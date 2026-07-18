@@ -27,8 +27,9 @@ class Waypoint:
     self.param7 = z
     return
 
-def get_message(connection, message_names=None):
-  message = connection.recv_match(type=message_names, blocking=True, timeout=TIMEOUT)
+def get_message(connection, message_names=None, condition=None):
+  message = connection.recv_match(type=message_names, blocking=True, 
+                                  timeout=TIMEOUT, condition=condition)
   if message:
     print(message)
   else:
@@ -85,9 +86,16 @@ if __name__ == "__main__":
   if home is None:
     raise Exception("Failed to get starting position of Drone")
 
+  # Under the Global WGS84 standard, latitude and longitude are express in terms of 10**7.
+  latitude = E7ToDeg(home.latitude)
+  longitude = E7ToDeg(home.longitude)
+
   waypoints = []
   waypoints.append(
-    Waypoint(0, 0, E7ToDeg(home.latitude), E7ToDeg(home.longitude), home.altitude + 0.0000000001)
+    Waypoint(0, 0, latitude, longitude, home.altitude + 0.0000000001)
+  )
+  waypoints.append(
+    Waypoint(1, 0, latitude + 1, longitude, home.altitude + 0.0000000001)
   )
 
   upload_mission(conn, waypoints)
@@ -98,7 +106,13 @@ if __name__ == "__main__":
   send_command(conn, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  0, 0, 0, 0, nan, nan, nan, 50)
   get_message(conn, "COMMAND_ACK")
 
-  time.sleep(10)
+  send_command(conn, mavutil.mavlink.MAV_CMD_MISSION_START, 0, 0, 0, 0, 0, 0, 0, 0)
 
-  send_command(conn, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0)
-  get_message(conn, "COMMAND_ACK")
+  for waypoint in waypoints:
+    get_message(conn, "MISSION_ITEM_REACHED",
+                condition = f"MISSION_ITEM_REACHED.seq == {waypoint.seq}")
+
+  # time.sleep(10)
+
+  # send_command(conn, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0)
+  # get_message(conn, "COMMAND_ACK")
