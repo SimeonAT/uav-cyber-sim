@@ -92,10 +92,7 @@ if __name__ == "__main__":
 
   waypoints = []
   waypoints.append(
-    Waypoint(0, 0, latitude, longitude, home.altitude + 0.0000000001)
-  )
-  waypoints.append(
-    Waypoint(1, 0, latitude + 1, longitude, home.altitude + 0.0000000001)
+    Waypoint(0, 0, latitude + 0.0000000001, longitude, home.altitude)
   )
 
   upload_mission(conn, waypoints)
@@ -107,6 +104,7 @@ if __name__ == "__main__":
   get_message(conn, "COMMAND_ACK")
 
   send_command(conn, mavutil.mavlink.MAV_CMD_MISSION_START, 0, 0, 0, 0, 0, 0, 0, 0)
+  get_message(conn, "COMMAND_ACK")
 
   for waypoint in waypoints:
     get_message(conn, "MISSION_ITEM_REACHED",
