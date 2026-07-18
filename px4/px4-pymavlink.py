@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
   waypoints = []
   waypoints.append(
-    Waypoint(0, 0, latitude + 0.0000000001, longitude, home.altitude)
+    Waypoint(0, 0, latitude + 1, longitude, 2.5)
   )
 
   upload_mission(conn, waypoints)
@@ -102,15 +102,20 @@ if __name__ == "__main__":
 
   send_command(conn, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  0, 0, 0, 0, nan, nan, nan, 50)
   get_message(conn, "COMMAND_ACK")
+  
+  try:
+    send_command(conn, mavutil.mavlink.MAV_CMD_MISSION_START, 0, 0, 0, 0, 0, 0, 0, 0)
+    ack = get_message(conn, "COMMAND_ACK")
+    if ack is None:
+      raise Exception("Failed to receive ACK for MISSION_START command.")
+    if ack.result != 0:
+      raise Exception(f"COMMAND_ACK Error: {ack} with Status Code {ack.result}.")
 
-  send_command(conn, mavutil.mavlink.MAV_CMD_MISSION_START, 0, 0, 0, 0, 0, 0, 0, 0)
-  get_message(conn, "COMMAND_ACK")
+    for waypoint in waypoints:
+      get_message(conn, "MISSION_ITEM_REACHED",
+                  condition = f"MISSION_ITEM_REACHED.seq == {waypoint.seq}")
 
-  for waypoint in waypoints:
-    get_message(conn, "MISSION_ITEM_REACHED",
-                condition = f"MISSION_ITEM_REACHED.seq == {waypoint.seq}")
-
-  # time.sleep(10)
-
-  # send_command(conn, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0)
-  # get_message(conn, "COMMAND_ACK")
+  finally:
+    print("Landing Drone.")
+    send_command(conn, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0)
+    get_message(conn, "COMMAND_ACK")
