@@ -1,9 +1,8 @@
 import os
 os.environ['MAVLINK_DIALECT'] = 'development'
 from pymavlink import mavutil
-print(mavutil.mavlink.__name__)
+assert(mavutil.mavlink.__name__ == "pymavlink.dialects.v10.development")
 
-import time
 from math import nan
 
 ONBOARD_PORT = 14540
