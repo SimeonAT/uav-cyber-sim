@@ -1,10 +1,10 @@
-all: px4-pymavlink
+all: mission
 
-px4-pymavlink:
-	python3 ./px4-pymavlink.py
+mission:
+	python3 ./mission.py
 
-tutorial:
-	python3 ./mavlink_example.py
+offboard:
+	python3 ./offboard.py
 
 wireshark:
 	cd ~/PX4-Autopilot/src/modules/mavlink/mavlink && \
