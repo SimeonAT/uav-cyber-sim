@@ -1,7 +1,13 @@
+""" Before running any code, we must first switch from `ardupilotmega` dialect to the
+    PX4 `development dialect.
+"""
 import os
 os.environ['MAVLINK_DIALECT'] = 'development'
 from pymavlink import mavutil
+
 assert(mavutil.mavlink.__name__ == "pymavlink.dialects.v10.development")
+print(f"Running PX4 dialect: {mavutil.mavlink.__name__}.")
+print(f"Dialect file can be found at {mavutil.mavlink.__file__}.")
 
 from math import nan
 
