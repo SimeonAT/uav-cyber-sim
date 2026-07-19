@@ -11,7 +11,12 @@ print(f"Dialect file can be found at {mavutil.mavlink.__file__}.")
 
 from math import nan
 
+""" Per the PX4 documentation: https://docs.px4.io/main/en/advanced_config/ethernet_setup,
+    when controlling the drone, external computers should connect to the "onboard" MAVLink 
+    port at `14540`.
+"""
 ONBOARD_PORT = 14540
+
 SLEEP_TIME_SECS = 1
 TIMEOUT = None
 

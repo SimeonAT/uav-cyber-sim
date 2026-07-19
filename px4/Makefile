@@ -1,4 +1,4 @@
-all: mission
+all: offboard
 
 mission:
 	python3 ./mission.py
