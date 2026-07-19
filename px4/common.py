@@ -22,6 +22,20 @@ TIMEOUT = None
 
 E7ToDeg = lambda e7 : e7 / 10**7
 
+""" Current OFFBOARD mode ask only allows for control for the x, y, and z coordinates
+    of the drone.
+"""
+OFFBOARD_MASK = (
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_VX_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_VY_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_VZ_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_AX_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_AY_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_AZ_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_YAW_IGNORE |
+  mavutil.mavlink.POSITION_TARGET_TYPEMASK_YAW_RATE_IGNORE
+)
+
 class Waypoint:
   def __init__(self, seq, current, x, y, z):
     self.seq = seq
@@ -85,3 +99,10 @@ def send_command(connection, command, confirmation, param1, param2, param3,
   return connection.mav.command_long_send(connection.target_system, connection.target_component,
                                           command, confirmation, param1, param2, param3, param4,
                                           param5, param6, param7)
+
+def setpoint_send(connection, x, y, z):
+  return connection.mav.set_position_target_local_ned_send(
+    0, connection.target_system, connection.target_component,
+    mavutil.mavlink.MAV_FRAME_LOCAL_NED, OFFBOARD_MASK, x, y, z,
+    0, 0, 0, 0, 0, 0, 0, 0
+  )
