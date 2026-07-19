@@ -1,4 +1,7 @@
+import os
+os.environ['MAVLINK_DIALECT'] = 'development'
 from pymavlink import mavutil
+print(mavutil.mavlink.__name__)
 
 import time
 from math import nan
