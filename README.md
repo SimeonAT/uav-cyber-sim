@@ -105,7 +105,7 @@ If you would like to inspect MAVLink packets on Wireshark:
 
 1. Navigate to the `px4` directory, and run `make wireshark`. This will set up the [MAVLink Wireshark Lua plugin](https://mavlink.io/en/guide/wireshark.html).
 
-2. Start up by Wireshark by running the `wireshark` command in the container. The Wirshark GUI will then be displayed on your host system.
+2. Start up by Wireshark by running the `wireshark` command in the container. The Wirshark GUI will then be displayed on your host system. Refer to the [MAVLink documentation](https://mavlink.io/en/guide/wireshark.html#view-traffic-on-wireshark) on how to inspect MAVLink packets in Wireshark.
 
 **If the Wirshark user interface does not appear, run the following on your host system:**
 ```shell
