@@ -57,11 +57,8 @@ class Waypoint:
 def get_message(connection, message_names=None, condition=None, blocking=True, printstd=True):
   message = connection.recv_match(type=message_names, blocking=blocking, 
                                   timeout=TIMEOUT, condition=condition)
-  if printstd:
-    if message:
+  if printstd and message:
       print(message)
-    else:
-      print(f"Failed to receive message: {message_names}")
   return message
 
 def upload_mission(connection, waypoints):

@@ -19,6 +19,8 @@ if __name__ == "__main__":
   while True:
     elapsed = time.time() - start
 
+    get_message(conn, "HEARTBEAT", blocking=False)
+
     setpoint_send(conn, x=0, y=0, z=-2.5)
     get_message(conn, "POSITION_TARGET_LOCAL_NED", blocking=False, printstd=False)
 
@@ -26,9 +28,8 @@ if __name__ == "__main__":
       send_command(conn, mavutil.mavlink.MAV_CMD_DO_SET_MODE, confirmation=0,
                    param1=209, param2=6, param3=0, param4=0, param5=0, param6=0, param7=0)
     
-    if not Armed:
-      send_command(conn, mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
-    
+    # if not Armed:
+    #   send_command(conn, mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
 
     if not Mode_Set or not Armed:
       ack = get_message(conn, "COMMAND_ACK", blocking=False, printstd=True)
@@ -37,8 +38,10 @@ if __name__ == "__main__":
           ack.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
           Mode_Set = True
 
-        if ack.command == mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM and \
-          ack.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
-          Armed = True
+        # if ack.command == mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM and \
+        #   ack.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
+        #   Armed = True
+      
+      get_message(conn, "STATUSTEXT", blocking=False, printstd=False)
 
     time.sleep(STREAM_RATE_SECONDS)
