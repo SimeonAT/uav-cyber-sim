@@ -6,6 +6,8 @@ if __name__ == "__main__":
   conn.wait_heartbeat()
   print(f"Heartbeat from system {conn.target_system} component {conn.target_component}")
 
+  set_simulation(conn)
+
   # Get the starting coordinates of the drone.
   send_command(conn, mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE, 0,
                mavutil.mavlink.MAVLINK_MSG_ID_HOME_POSITION, 0, 0, 0, 0, 0, 0)
