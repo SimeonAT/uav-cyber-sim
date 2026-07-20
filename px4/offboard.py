@@ -14,6 +14,6 @@ if __name__ == "__main__":
 
   while True:
     setpoint_send(conn, 0, 0, 0)
-    get_message(conn, message_names="POSITION_TARGET_LOCAL_NED")
+    get_message(conn, message_names="POSITION_TARGET_LOCAL_NED", blocking=False)
 
     time.sleep(STREAM_RATE_SECONDS)

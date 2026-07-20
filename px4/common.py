@@ -54,8 +54,8 @@ class Waypoint:
     self.param7 = z
     return
 
-def get_message(connection, message_names=None, condition=None):
-  message = connection.recv_match(type=message_names, blocking=True, 
+def get_message(connection, message_names=None, condition=None, blocking=True):
+  message = connection.recv_match(type=message_names, blocking=blocking, 
                                   timeout=TIMEOUT, condition=condition)
   if message:
     print(message)
