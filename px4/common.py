@@ -101,7 +101,7 @@ def send_command(connection, command, confirmation, param1, param2, param3,
                                           command, confirmation, param1, param2, param3, param4,
                                           param5, param6, param7)
 
-def setpoint_send(connection, x, y, z):
+def setpoint_send(connection, x=0.0, y=0.0, z=0.0):
   return connection.mav.set_position_target_local_ned_send(
     0, connection.target_system, connection.target_component,
     mavutil.mavlink.MAV_FRAME_LOCAL_NED, OFFBOARD_MASK, x, y, z,

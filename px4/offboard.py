@@ -18,13 +18,16 @@ if __name__ == "__main__":
   while True:
     elapsed = time.time() - start
 
-    setpoint_send(conn, 0, 0, 0)
+    setpoint_send(conn, x=0, y=0, z=-2.5)
     get_message(conn, message_names="POSITION_TARGET_LOCAL_NED", blocking=False, printstd=False)
 
     if elapsed > 5 and not Armed:
       send_command(conn, mavutil.mavlink.MAV_CMD_DO_SET_MODE, confirmation=0,
                    param1=mavutil.mavlink.MAV_MODE_FLAG_GUIDED_ENABLED,
                    param2=0, param3=0, param4=0, param5=0, param6=0, param7=0)
+      get_message(conn, message_names="COMMAND_ACK")
+
+      send_command(conn, mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
       get_message(conn, message_names="COMMAND_ACK")
       
       Armed = True
