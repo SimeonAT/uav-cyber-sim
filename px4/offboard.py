@@ -6,7 +6,7 @@ HertzToSeconds = lambda hertz : 1 / hertz
 STREAM_RATE_HZ = 20
 STREAM_RATE_SECONDS = HertzToSeconds(STREAM_RATE_HZ)
 
-MESSAGE_FILTER = ["HEARTBEAT", "STATUSTEXT", "COMMAND_ACK"]
+MESSAGE_FILTER = ["HEARTBEAT", "STATUSTEXT", "COMMAND_ACK", "LOCAL_POSITION_NED"]
 
 Armed = False
 Mode_Set = False
@@ -26,7 +26,7 @@ if __name__ == "__main__":
   set_simulation(conn)
 
   while True:
-    setpoint_send(conn, x=0, y=0, z=-2.5)
+    setpoint_send(conn, x=5, y=5, z=-2.5)
 
     if not Mode_Set:
       send_command(conn, mavutil.mavlink.MAV_CMD_DO_SET_MODE, confirmation=0,
