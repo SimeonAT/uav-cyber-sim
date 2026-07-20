@@ -25,10 +25,7 @@ if __name__ == "__main__":
   
   set_simulation(conn)
 
-  start = time.time()
   while True:
-    elapsed = time.time() - start
-
     setpoint_send(conn, x=0, y=0, z=-2.5)
 
     if not Mode_Set:
