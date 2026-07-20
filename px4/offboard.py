@@ -6,8 +6,16 @@ HertzToSeconds = lambda hertz : 1 / hertz
 STREAM_RATE_HZ = 20
 STREAM_RATE_SECONDS = HertzToSeconds(STREAM_RATE_HZ)
 
+MESSAGE_FILTER = ["HEARTBEAT", "STATUSTEXT", "COMMAND_ACK"]
+
 Armed = False
 Mode_Set = False
+
+def print_stream(connection):
+  message = get_message(connection, blocking=False, printstd=False)
+  if message and message.get_type() in MESSAGE_FILTER:
+    print(message)
+  return
 
 if __name__ == "__main__":
   conn = mavutil.mavlink_connection(f'udpin:localhost:{ONBOARD_PORT}')
@@ -18,11 +26,9 @@ if __name__ == "__main__":
   start = time.time()
   while True:
     elapsed = time.time() - start
-
-    get_message(conn, "HEARTBEAT", blocking=False)
+    print_stream(conn)
 
     setpoint_send(conn, x=0, y=0, z=-2.5)
-    get_message(conn, "POSITION_TARGET_LOCAL_NED", blocking=False, printstd=False)
 
     if not Mode_Set:
       send_command(conn, mavutil.mavlink.MAV_CMD_DO_SET_MODE, confirmation=0,
@@ -41,7 +47,5 @@ if __name__ == "__main__":
         # if ack.command == mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM and \
         #   ack.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
         #   Armed = True
-      
-      get_message(conn, "STATUSTEXT", blocking=False, printstd=False)
 
     time.sleep(STREAM_RATE_SECONDS)
