@@ -104,3 +104,11 @@ def setpoint_send(connection, x=0.0, y=0.0, z=0.0):
     mavutil.mavlink.MAV_FRAME_LOCAL_NED, OFFBOARD_MASK, x, y, z,
     0, 0, 0, 0, 0, 0, 0, 0
   )
+
+def set_simulation(connection):
+  parameters = [("SIM_BAT_DRAIN", 0)]
+  for key, value in parameters:
+    connection.mav.param_set_send(connection.target_system, connection.target_component,
+                                  key.encode("ascii"), float(value),
+                                  mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
+  return
