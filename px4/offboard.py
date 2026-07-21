@@ -11,11 +11,26 @@ MESSAGE_FILTER = ["HEARTBEAT", "STATUSTEXT", "COMMAND_ACK", "LOCAL_POSITION_NED"
 Armed = False
 Mode_Set = False
 
+WAYPOINTS = [
+  (5, 5, -2.5)
+]
+
+OFFSET = 0.3
+
 def filter_stream(connection):
   message = get_message(connection, blocking=False, printstd=False)
-  if message and message.get_type() in MESSAGE_FILTER:
-    print(message)
+  # if message and message.get_type() in MESSAGE_FILTER:
+  #   print(message)
   return message
+
+def reached(current, waypoint):
+  (x_c, y_c, z_c) = current
+  (x_w, y_w, z_w) = waypoint
+  dist = ((x_c - x_w)**2 + (y_c - y_w)**2 + (z_c - z_w)**2)**0.5
+  print(current)
+  print(waypoint)
+  print()
+  return True if dist <= OFFSET else False
 
 if __name__ == "__main__":
   conn = mavutil.mavlink_connection(f'udpin:localhost:{ONBOARD_PORT}')
@@ -24,9 +39,11 @@ if __name__ == "__main__":
   print(f"Heartbeat from system {conn.target_system} component {conn.target_component}")
   
   set_simulation(conn)
+  waypoint_index = 0
 
   while True:
-    setpoint_send(conn, x=5, y=5, z=-2.5)
+    waypoint = WAYPOINTS[waypoint_index]
+    setpoint_send(conn, x=waypoint[0], y=waypoint[1], z=waypoint[2])
 
     if not Mode_Set:
       send_command(conn, mavutil.mavlink.MAV_CMD_DO_SET_MODE, confirmation=0,
@@ -45,5 +62,13 @@ if __name__ == "__main__":
         if message.command == mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM and \
           message.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
           Armed = True
+
+    match message.get_type():
+      case "LOCAL_POSITION_NED":
+        if reached((message.x, message.y, message.z), waypoint):
+          print(f"Reached Waypoint {waypoint}.")
+          break
+  
+      case _ : pass
 
     time.sleep(STREAM_RATE_SECONDS)
