@@ -75,3 +75,12 @@ if __name__ == "__main__":
       case _ : pass
 
     time.sleep(STREAM_RATE_SECONDS)
+  
+  print("Landing Drone.")
+  send_command(conn, mavutil.mavlink.MAV_CMD_NAV_LAND,
+                0, 0, 0, 0, 0, 0, 0, 0)
+
+  ack = get_message(conn, "COMMAND_ACK")
+  if ack and ack.command == mavutil.mavlink.MAV_CMD_NAV_LAND and ack.result == \
+     mavutil.mavlink.MAV_RESULT_ACCEPTED:
+    print("Landing complete.")
