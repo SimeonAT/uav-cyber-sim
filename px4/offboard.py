@@ -12,8 +12,9 @@ Armed = False
 Mode_Set = False
 
 WAYPOINTS = [
+  (0, 5, -2.5),
   (5, 5, -2.5),
-  (10, 10, -2.5),
+  (5, 0, -2.5),
   (0, 0, -2.5)
 ]
 WAYPOINT_REACHED_ACCURACY = 0.3
