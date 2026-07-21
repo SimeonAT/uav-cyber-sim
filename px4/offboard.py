@@ -12,10 +12,11 @@ Armed = False
 Mode_Set = False
 
 WAYPOINTS = [
-  (5, 5, -2.5)
+  (5, 5, -2.5),
+  (10, 10, -2.5),
+  (0, 0, -2.5)
 ]
-
-OFFSET = 0.3
+WAYPOINT_REACHED_ACCURACY = 0.3
 
 def filter_stream(connection):
   message = get_message(connection, blocking=False, printstd=False)
@@ -27,10 +28,7 @@ def reached(current, waypoint):
   (x_c, y_c, z_c) = current
   (x_w, y_w, z_w) = waypoint
   dist = ((x_c - x_w)**2 + (y_c - y_w)**2 + (z_c - z_w)**2)**0.5
-  print(current)
-  print(waypoint)
-  print()
-  return True if dist <= OFFSET else False
+  return True if dist <= WAYPOINT_REACHED_ACCURACY else False
 
 if __name__ == "__main__":
   conn = mavutil.mavlink_connection(f'udpin:localhost:{ONBOARD_PORT}')
@@ -67,8 +65,12 @@ if __name__ == "__main__":
       case "LOCAL_POSITION_NED":
         if reached((message.x, message.y, message.z), waypoint):
           print(f"Reached Waypoint {waypoint}.")
-          break
-  
+          
+          waypoint_index += 1
+          if waypoint_index >= len(WAYPOINTS):
+            print(f"Mission Complete.")
+            break
+
       case _ : pass
 
     time.sleep(STREAM_RATE_SECONDS)
