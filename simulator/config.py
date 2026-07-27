@@ -14,6 +14,10 @@ QGC_INI_PATH = HOME / ".config" / "QGroundControl.org" / "QGroundControl Daily.i
 ARDUPILOT_VEHICLE_PATH = HOME / "ardupilot" / "Tools" / "autotest" / "sim_vehicle.py"
 ARDUPILOT_GAZEBO_MODELS = HOME / "ardupilot_gazebo" / "models"
 
+# --- PX4 Specific Paths ---
+PX4_AUTOPILOT_PATH = HOME / "PX4-Autopilot"
+PX4_BUILD_PATH = PX4_AUTOPILOT_PATH / "build" / "px4_sitl_default"
+
 # --- Local Paths ---
 ROOT = Path(__file__).parent
 ARDU_LOGS_PATH = (ROOT / "ardupilot_logs").resolve()
