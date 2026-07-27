@@ -23,3 +23,6 @@ build-px4-only:
 	@test -f $(PX4_BUILD_DIR)/bin/px4 && \
 	  echo "bin/px4 built successfully at $(PX4_BUILD_DIR)/bin/px4" || \
 	  (echo "bin/px4 missing after build - link step likely failed" && exit 1)
+
+start-px4:
+	$(PX4_BUILD_DIR)/bin/px4 $(PX4_BUILD_DIR)/etc
