@@ -15,6 +15,7 @@ from simulator.config import (
     DATA_PATH,
     ENV_CMD_PYT,
     VEH_PARAMS_PATH,
+    PX4_BUILD_PATH,
     BasePort,
 )
 from simulator.helpers.processes import create_process
@@ -164,6 +165,11 @@ class Simulator(Generic[V]):
                     {
                         "sysid": sysid,
                         "port_offset": self.uav_port_offsets[j],
+                        "px4_cmd": (
+                            f"{PX4_BUILD_PATH}/bin/px4"
+                            f"-i {j}"
+                            f" {PX4_BUILD_PATH}/etc"
+                        ),
                         "ardupilot_cmd": (
                             f"python3 {ARDUPILOT_VEHICLE_PATH}"
                             f" -v ArduCopter -I{j} --sysid {sysid} --no-rebuild"
