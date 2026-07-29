@@ -129,8 +129,8 @@ RUN git clone https://github.com/SimeonAT/ardupilot_gazebo.git && \
   cmake .. && \
   make -j$(nproc) && \
   sudo make install
-RUN echo 'source /usr/share/gazebo/setup.sh' >> ~/.profile
-RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models' >> ~/.profile
+# RUN echo 'source /usr/share/gazebo/setup.sh' >> ~/.profile
+# RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models' >> ~/.profile
 
 # INSTALL PX4
 RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive -b v1.14.4 && \
@@ -151,6 +151,14 @@ RUN cd ~/PX4-Autopilot && \
   DONT_RUN=1 make px4_sitl_default gazebo-classic && \
   test -f build/px4_sitl_default/bin/px4 && \
   find build/px4_sitl_default/build_gazebo-classic -name "libgazebo_mavlink_interface.so" | grep -q .
+
+# Set up PX4 and Gazebo environment variable. Also sets up env variables for ArduPilot too
+# to avoid any potential breaking changes.
+#
+RUN echo 'source /usr/share/gazebo/setup.sh' >> ~/.profile
+RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models:~/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models' >> ~/.profile
+RUN echo 'export GAZEBO_PLUGIN_PATH=~/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic' >> ~/.profile
+RUN echo 'export PX4_SIM_MODEL=gazebo-classic_iris' >> ~/.profile
 
 # INSTALL MINICONDA
 RUN mkdir ~/miniconda3 && \
