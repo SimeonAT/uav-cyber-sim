@@ -98,3 +98,4 @@ Colors = list[Color]
 ENV_CMD_PYT = None
 ENV_CMD_ARP = "source ~/.profile"
 ENV_CMD_GAZ = "source ~/.profile"
+ENV_CMD_PX4 = "source ~/.profile"

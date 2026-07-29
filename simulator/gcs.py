@@ -14,7 +14,7 @@ from typing import TypedDict
 import zmq
 from pymavlink import mavutil
 
-from simulator.config import DATA_PATH, ENV_CMD_ARP, ENV_CMD_PYT, BasePort
+from simulator.config import DATA_PATH, ENV_CMD_ARP, ENV_CMD_PYT, ENV_CMD_PX4, BasePort
 from simulator.helpers.connections import (
     MAVConnection,
     create_udp_conn,
@@ -170,6 +170,7 @@ class GCS(UAVMonitor):
             visible=True,
             suppress_output=False,
             title=f"PX4 SITL Launcher: Vehicle {sysid}",
+            env_cmd=ENV_CMD_PX4,
         )  # "exit"
         logging.debug(f"PX4 SITL vehicle {sysid} launched (PID {p.pid})")
 
