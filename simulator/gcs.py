@@ -46,6 +46,7 @@ class UAVGCSConfig(TypedDict):
     sysid: int
     port_offset: int
     ardupilot_cmd: str
+    px4_cmd: str
     logic_cmd: str
     proxy_cmd: str
 
@@ -162,6 +163,15 @@ class GCS(UAVMonitor):
         #     env_cmd=ENV_CMD_ARP,
         # )  # "exit"
         # logging.debug(f"ArduPilot SITL vehicle {sysid} launched (PID {p.pid})")
+
+        p = create_process(
+            uav_config["px4_cmd"],
+            after="exec bash",
+            visible=True,
+            suppress_output=False,
+            title=f"PX4 SITL Launcher: Vehicle {sysid}",
+        )  # "exit"
+        logging.debug(f"PX4 SITL vehicle {sysid} launched (PID {p.pid})")
 
         conn = create_udp_conn(
             base_port=BasePort.GCS,
