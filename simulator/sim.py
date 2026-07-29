@@ -156,6 +156,7 @@ class Simulator(Generic[V]):
                 json.dump(logic_config, f, indent=2)
 
     def _save_gcs_configs(self, folder_name: Path):
+        print(folder_name)
         n = 0
         for i, (gcs_name, sysids) in enumerate(self.gcs_sysids.items()):
             gcs_config = {
@@ -167,7 +168,8 @@ class Simulator(Generic[V]):
                         "port_offset": self.uav_port_offsets[j],
                         "px4_cmd": (
                             f"{PX4_BUILD_PATH}/bin/px4"
-                            f"-i {j}"
+                            f" -i {j}"
+                            f" -d"
                             f" {PX4_BUILD_PATH}/etc"
                         ),
                         "ardupilot_cmd": (
