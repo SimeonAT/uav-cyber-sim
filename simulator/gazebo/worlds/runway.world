@@ -24,7 +24,8 @@
 
         Under lockstep, `real_time_update_rate * max_step_size` must equal the target real-time
         factor (1.0 here). Re-enabled the max_step_size value that was previously commented out
-        (0.0020) and solved for the paired rate: 1.0 / 0.0020 = 500.
+        in the upstream repository of `uav-cyber-sim` (0.0020) and solved for the paired rate:
+        1.0 / 0.0020 = 500.
 
         References:
           - Gazebo Classic physics parameters tutorial (states the
