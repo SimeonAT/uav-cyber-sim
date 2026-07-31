@@ -26,6 +26,11 @@ DATA_PATH = (ROOT / "data").resolve()
 PX4_AUTOPILOT_PATH = HOME / "PX4-Autopilot"
 PX4_BUILD_PATH = PX4_AUTOPILOT_PATH / "build" / "px4_sitl_default"
 
+PX4_GAZEBO_MODELS = (
+  HOME / "PX4-Autopilot" / "Tools" / "simulation"
+  / "gazebo-classic" / "sitl_gazebo-classic" / "models"
+)
+
 PX4_DATA_PATH = (ROOT / "data" / "px4").resolve()
 
 # Ensure logs directory exists (can be cleaned later)
