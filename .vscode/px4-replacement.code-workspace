@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic"
+		}
+	],
+  "settings": {
+    "notebook.lineNumbers": "on",
+    "python.languageServer": "Pylance",
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+  }
+}
