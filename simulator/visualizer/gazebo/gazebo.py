@@ -21,7 +21,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 
-from simulator.config import ARDUPILOT_GAZEBO_MODELS, PX4_GAZEBO_MODELS, ENV_CMD_GAZ, Color
+from simulator.config import ARDUPILOT_GAZEBO_MODELS, ENV_CMD_GAZ, Color
 from simulator.helpers.coordinates import XYZRPY, ENUPose, GRAPose
 from simulator.helpers.math import heading_to_yaw
 from simulator.helpers.processes import create_process
@@ -144,18 +144,18 @@ class Gazebo(Visualizer[GazVehicle]):
         base_port_in: int = 9002,
         port_step: int = 10,
     ) -> None:
-        template_path = Path(PX4_GAZEBO_MODELS) / "iris"
-        output_dir = Path(PX4_GAZEBO_MODELS)
+        template_path = Path(ARDUPILOT_GAZEBO_MODELS) / "drone"
+        output_dir = Path(ARDUPILOT_GAZEBO_MODELS)
         output_dir.mkdir(parents=True, exist_ok=True)
 
         for i in range(self.num_vehicles):
-            name = f"iris{i + 1}"
+            name = f"drone{i + 1}"
             new_model_path = output_dir / name
             if new_model_path.exists():
                 shutil.rmtree(new_model_path)
             shutil.copytree(template_path, new_model_path)
 
-            sdf_path = new_model_path / "iris.sdf"
+            sdf_path = new_model_path / "model.sdf"
             with open(sdf_path, "r", encoding="utf-8") as f:
                 sdf = f.read()
 
@@ -231,7 +231,7 @@ class Gazebo(Visualizer[GazVehicle]):
         for i, veh in enumerate(self.vehicles):
             x, y, z, h = veh.home
             pose = XYZRPY(x, y, z, 0, 0, heading_to_yaw(h))
-            drone_elem = self._generate_drone_element(f"iris{i + 1}", pose)
+            drone_elem = self._generate_drone_element(f"drone{i + 1}", pose)
             world_elem.append(drone_elem)
 
     def _add_inertial(self, link: ET.Element) -> None:
