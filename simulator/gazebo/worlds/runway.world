@@ -15,8 +15,28 @@
           <contact_surface_layer>0.0</contact_surface_layer>
         </constraints>
       </ode>
-      <real_time_update_rate>-1</real_time_update_rate>
+      <!-- <real_time_update_rate>-1</real_time_update_rate> -->
       <!-- <max_step_size>0.0020</max_step_size> -->
+      <!--
+        UCI Fork Edit: `real_time_update_rate` was previously -1 (uncapped), which is incompatible
+        with PX4's lockstep requirement in `libgazebo_mavlink_interface.so`  (aborts at startup:
+        "max_step_size of X s does not match real_time_update_rate of Y, aborting.").
+
+        Under lockstep, `real_time_update_rate * max_step_size` must equal the target real-time
+        factor (1.0 here). Re-enabled the max_step_size value that was previously commented out
+        (0.0020) and solved for the paired rate: 1.0 / 0.0020 = 500.
+
+        References:
+          - Gazebo Classic physics parameters tutorial (states the
+            `max_step_size x real_time_update_rate = real_time_factor` relationship):
+            https://classic.gazebosim.org/tutorials?tut=physics_params
+          
+          - PX4 lockstep docs: https://docs.px4.io/main/en/sim_gazebo_classic/
+
+        Diagnosis and fix recommendation via Claude (Anthropic).
+      -->
+      <real_time_update_rate>500</real_time_update_rate>
+      <max_step_size>0.0020</max_step_size>
     </physics>
 
     <model name="ground_plane">
