@@ -176,7 +176,7 @@ class MessageRouter(threading.Thread):
     def run(self):
         """Continuously receive messages and dispatch them until stopped."""
         while not self.stop_event.is_set():
-            timeout = 1
+            timeout = 5
             msg = self.source.recv_match(blocking=True, timeout=timeout)
             if msg and not self.stop_event.is_set():
                 # logging.debug(f"UAV ({self.sysid}): Received {msg}")
