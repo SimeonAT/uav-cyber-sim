@@ -155,7 +155,7 @@ class Gazebo(Visualizer[GazVehicle]):
                 shutil.rmtree(new_model_path)
             shutil.copytree(template_path, new_model_path)
 
-            sdf_path = new_model_path / "model.sdf"
+            sdf_path = new_model_path / "iris.sdf"
             with open(sdf_path, "r", encoding="utf-8") as f:
                 sdf = f.read()
 
@@ -231,7 +231,7 @@ class Gazebo(Visualizer[GazVehicle]):
         for i, veh in enumerate(self.vehicles):
             x, y, z, h = veh.home
             pose = XYZRPY(x, y, z, 0, 0, heading_to_yaw(h))
-            drone_elem = self._generate_drone_element(f"drone{i + 1}", pose)
+            drone_elem = self._generate_drone_element(f"iris{i + 1}", pose)
             world_elem.append(drone_elem)
 
     def _add_inertial(self, link: ET.Element) -> None:
