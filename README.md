@@ -66,7 +66,7 @@ cd ardupilot_gazebo
 git checkout parallel-simulation
 ```
 
-3. Clone our fork of [`PX4-Autopilot](https://github.com/SimeonAT/PX4-Autopilot). Navigate to the forked repository and checkout the commit to the `uav-cyber-sim` branch:
+3. Clone our fork of [`PX4-Autopilot`](https://github.com/SimeonAT/PX4-Autopilot). Navigate to the forked repository and checkout the commit to the `uav-cyber-sim` branch:
 ```shell
 cd PX4-Autopilot
 git checkout uav-cyber-sim
