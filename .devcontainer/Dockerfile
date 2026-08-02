@@ -133,9 +133,10 @@ RUN git clone https://github.com/SimeonAT/ardupilot_gazebo.git && \
 # RUN echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models' >> ~/.profile
 
 # INSTALL PX4
-RUN git clone https://github.com/SimeonAT/PX4-Autopilot.git --recurse-submodules && \
+RUN git clone https://github.com/SimeonAT/PX4-Autopilot.git && \
   cd PX4-Autopilot && \
-  git checkout --recurse-submodules uav-cyber-sim && \
+  git checkout uav-cyber-sim && \
+  git submodule update --init --recursive && \
   sed -i "s/matplotlib>=3.0.\*/matplotlib>=3.0/" Tools/setup/requirements.txt && \
   ./Tools/setup/ubuntu.sh --no-nuttx --no-sim-tools
 
