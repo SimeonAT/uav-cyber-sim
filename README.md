@@ -66,19 +66,13 @@ cd ardupilot_gazebo
 git checkout parallel-simulation
 ```
 
-3. Clone our fork of [`PX4-Autopilot`](https://github.com/SimeonAT/PX4-Autopilot/tree/uav-cyber-sim). Navigate to the forked repository and checkout the commit to the `uav-cyber-sim` branch:
-```shell
-cd PX4-Autopilot
-git checkout uav-cyber-sim
-```
-
-4. Navigate to the `.devcontainer` directory and build the Docker image:
+3. Navigate to the `.devcontainer` directory and build the Docker image:
 ```shell
 cd .devcontainer
 docker build --tag "uav-cyber-sim" .
 ```
 
-5. After the image has been built, launch the container with the following command:
+4. After the image has been built, launch the container with the following command:
 ```shell
 docker run -u ubuntu \
   --gpus all \
@@ -92,12 +86,11 @@ docker run -u ubuntu \
   --volume="/dev/dri:/dev/dri:ro" \
   --volume="[Path to directory containing `uav-cyber-sim` repository]:/home/ubuntu/uav-cyber-sim" \
   --volume="[Path to directory containing `ardupilot_gazebo` repository]:/home/ubuntu/ardupilot_gazebo" \
-  --volume="[Path to directory containing `PX4-Autopilot` repository]:/home/ubuntu/PX4-Autopilot" \
   --name uav-cyber-sim -d uav-cyber-sim:latest
 ```
 **Do not** launch the container through SSH; otherwise, Gazebo will not be able to render. You must run this command on the same device that is running `uav-cyber-sim`, and hence, the Gazebo simulation environment.
 
-6. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
+5. VS Code's 'Dev Containers' extension can be then used to attach to a running container in order to run the example Jupyter notebooks. 
 
 **If you encounter "cannot connect to display" error, run the following on your host system:**
 ```shell
