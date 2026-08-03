@@ -6,6 +6,10 @@ PX4_MODELS_DIR = (
   "gazebo-classic" / "sitl_gazebo-classic" / "models"
 )
 
+OUTPUT_FILE = (
+  PX4_MODELS_DIR / "iris_test.sdf"
+)
+
 """ The required variables for `iris.sdf.jinja` are:
       1. mavlink_tcp_port (default = 4560)
       2. mavlink_udp_port (default = 14560)
@@ -27,4 +31,6 @@ def create_drone_sdf(sdf_path):
   })
 
 if __name__ == "__main__":
-  create_drone_sdf(PX4_MODELS_DIR / "iris")
+  sdf = create_drone_sdf(PX4_MODELS_DIR / "iris")
+  with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+      f.write(sdf)

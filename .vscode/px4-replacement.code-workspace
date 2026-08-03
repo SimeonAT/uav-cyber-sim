@@ -5,6 +5,9 @@
     },
     {
       "path": "../../PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic"
+    },
+    {
+      "path": "../../ardupilot_gazebo"
     }
   ],
   "settings": {
