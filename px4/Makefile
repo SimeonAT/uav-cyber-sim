@@ -1,6 +1,5 @@
 PX4_AUTOPILOT_PATH ?= $(HOME)/PX4-Autopilot
 PX4_BUILD_DIR := $(PX4_AUTOPILOT_PATH)/build/px4_sitl_default
-JINJA_GEN := $(PX4_AUTOPILOT_PATH)/Tools/simulation/gazebo-classic/sitl_gazebo-classic/scripts/jinja_gen.py
 
 all: offboard
 
@@ -9,9 +8,6 @@ mission:
 
 offboard:
 	python3 ./offboard.py
-
-jinja:
-	$(JINJA_GEN)
 
 wireshark:
 	cd ~/PX4-Autopilot/src/modules/mavlink/mavlink && \
