@@ -26,3 +26,6 @@ build-px4-only:
 
 start-px4:
 	$(PX4_BUILD_DIR)/bin/px4 $(PX4_BUILD_DIR)/etc
+
+jinja:
+	python3 ./jinja.py
