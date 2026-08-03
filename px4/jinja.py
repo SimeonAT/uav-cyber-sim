@@ -14,12 +14,17 @@ PX4_MODELS_DIR = (
       5. serial_baudrate (default = 921600)
       6. hil_mode (default = 0)
 """
-def create_drone_sdf():
-  env = Environment(loader=FileSystemLoader(PX4_MODELS_DIR / "iris"))
+def create_drone_sdf(sdf_path):
+  env = Environment(loader=FileSystemLoader(sdf_path))
   template = env.get_template("iris.sdf.jinja")
-
-  print(template)
-  return
+  return template.render({
+    "mavlink_tcp_port": 4560,
+    "mavlink_udp_port": 14560,
+    "serial_enabled": 0,
+    "serial_device": "/dev/ttyACM0",
+    "serial_baudrate": 921600,
+    "hil_mode": 0
+  })
 
 if __name__ == "__main__":
-  create_drone_sdf()
+  create_drone_sdf(PX4_MODELS_DIR / "iris")
