@@ -20,6 +20,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
+from jinja2 import Environment, FileSystemLoader
 
 from simulator.config import ARDUPILOT_GAZEBO_MODELS, PX4_GAZEBO_MODELS, ENV_CMD_GAZ, Color
 from simulator.helpers.coordinates import XYZRPY, ENUPose, GRAPose
@@ -138,6 +139,18 @@ class Gazebo(Visualizer[GazVehicle]):
             mtraj=markertraj,
         )
 
+    def _create_drone_model_sdf(self, sdf_path: Path):
+      env = Environment(loader=FileSystemLoader(sdf_path))
+      template = env.get_template("iris.sdf.jinja")
+      return template.render({
+        "mavlink_tcp_port": 4560,
+        "mavlink_udp_port": 14560,
+        "serial_enabled": 0,
+        "serial_device": "/dev/ttyACM0",
+        "serial_baudrate": 921600,
+        "hil_mode": 0
+      })
+
     def _generate_drone_models_from_bases(
         self,
         base_models: list[str],
@@ -156,8 +169,10 @@ class Gazebo(Visualizer[GazVehicle]):
             shutil.copytree(template_path, new_model_path)
 
             sdf_path = new_model_path / "iris.sdf"
-            with open(sdf_path, "r", encoding="utf-8") as f:
-                sdf = f.read()
+            sdf = self._create_drone_model_sdf(sdf_path)
+
+            # with open(sdf_path, "r", encoding="utf-8") as f:
+            #     sdf = f.read()
 
             # sdf = re.sub(r'<model name="[^"]+">', f'<model name="{name}">', sdf)
             # sdf = re.sub(
