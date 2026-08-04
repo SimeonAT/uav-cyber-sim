@@ -14,6 +14,7 @@ Main Features:
 """
 
 import logging
+from numbers import Number
 import os
 import re
 import shutil
@@ -139,16 +140,21 @@ class Gazebo(Visualizer[GazVehicle]):
             mtraj=markertraj,
         )
 
-    def _create_drone_model_sdf(self, sdf_path: Path):
+    def _create_drone_model_sdf(self, sdf_path: Path,
+                                mavlink_tcp_port=4560,
+                                sdk_udp_port=14540,
+                                qgc_udp_port=14550):
       env = Environment(loader=FileSystemLoader(sdf_path))
       template = env.get_template("iris.sdf.jinja")
       return template.render({
-        "mavlink_tcp_port": 4560,
+        "mavlink_tcp_port": mavlink_tcp_port,
         "mavlink_udp_port": 14560,
         "serial_enabled": 0,
         "serial_device": "/dev/ttyACM0",
         "serial_baudrate": 921600,
-        "hil_mode": 0
+        "hil_mode": 0,
+        "sdk_udp_port": sdk_udp_port,
+        "qgc_udp_port": qgc_udp_port
       })
 
     def _generate_drone_models_from_bases(
@@ -169,7 +175,12 @@ class Gazebo(Visualizer[GazVehicle]):
             shutil.copytree(template_path, new_model_path)
 
             sdf_path = new_model_path / "iris.sdf"
-            sdf = self._create_drone_model_sdf(new_model_path)
+            sdf = self._create_drone_model_sdf(
+              new_model_path,
+              mavlink_tcp_port=4560,
+              sdk_udp_port=14540,
+              qgc_udp_port=14550
+            )
 
             # with open(sdf_path, "r", encoding="utf-8") as f:
             #     sdf = f.read()
@@ -196,6 +207,7 @@ class Gazebo(Visualizer[GazVehicle]):
 
             with open(sdf_path, "w", encoding="utf-8") as f:
                 f.write(sdf)
+        return
 
     def _update_world(self, world_path: str) -> str:
         updated_world_path = os.path.expanduser(world_path[:-6] + "_updated.world")
