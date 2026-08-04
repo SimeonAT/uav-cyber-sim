@@ -169,7 +169,7 @@ class Gazebo(Visualizer[GazVehicle]):
             shutil.copytree(template_path, new_model_path)
 
             sdf_path = new_model_path / "iris.sdf"
-            sdf = self._create_drone_model_sdf(sdf_path)
+            sdf = self._create_drone_model_sdf(new_model_path)
 
             # with open(sdf_path, "r", encoding="utf-8") as f:
             #     sdf = f.read()
