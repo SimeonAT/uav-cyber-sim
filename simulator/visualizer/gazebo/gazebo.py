@@ -132,7 +132,7 @@ class Gazebo(Visualizer[GazVehicle]):
                     alpha=alpha,
                 )
             )
-            self.markers.extend(markertraj)
+        self.markers.extend(markertraj)
         return GazVehicle(
             model=vehicle.model,
             color=vehicle.color,
