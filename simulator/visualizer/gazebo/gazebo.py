@@ -175,10 +175,15 @@ class Gazebo(Visualizer[GazVehicle]):
             shutil.copytree(template_path, new_model_path)
 
             sdf_path = new_model_path / "iris.sdf"
+
+            # All PX4 drone instances `i` after the 9th instance must connect
+            # to MAVLink port `14549`.
+            # https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
+            #
             sdf = self._create_drone_model_sdf(
               new_model_path,
-              mavlink_tcp_port=4560,
-              sdk_udp_port=14540,
+              mavlink_tcp_port=4560 + i,
+              sdk_udp_port=(14549 if 14540 + i > 14549 else 14540),
               qgc_udp_port=14550
             )
 
