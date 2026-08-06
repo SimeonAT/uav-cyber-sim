@@ -146,6 +146,10 @@ class Gazebo(Visualizer[GazVehicle]):
                                 qgc_udp_port=14550):
       env = Environment(loader=FileSystemLoader(sdf_path))
       template = env.get_template("iris.sdf.jinja")
+
+      # `mavlink_udp_port` is set to default value of `14560` as it is not
+      # used by PX4 Iris drone models.
+      #
       return template.render({
         "mavlink_tcp_port": mavlink_tcp_port,
         "mavlink_udp_port": 14560,
