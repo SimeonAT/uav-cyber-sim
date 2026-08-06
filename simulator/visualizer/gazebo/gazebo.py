@@ -187,7 +187,6 @@ class Gazebo(Visualizer[GazVehicle]):
             sdf = self._create_drone_model_sdf(
               new_model_path,
               mavlink_tcp_port=4560 + i,
-              mavlink_udp_port=14560,
               sdk_udp_port=sdk_udp_port,
               qgc_udp_port=14550
             )
