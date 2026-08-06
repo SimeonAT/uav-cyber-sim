@@ -101,6 +101,16 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     #     stop_event=stop_event,
     # )
 
+    # PX4 → LOG
+    router1 = MessageRouter(
+        source=px4_conn,
+        targets=[lg_queue],
+        labels=["⬅️ LOG ← PX4"],
+        sysid=sysid,
+        sender="PX4",
+        stop_event=stop_event
+    )
+
     # LOG → ARP
     router2 = MessageRouter(
         source=lg_conn,
@@ -120,7 +130,7 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     sensor_log_files: dict[str, TextIO] = {}
     logging.debug(f"Proxy {sysid}: CSV log file created")
     try:
-        # router1.start()
+        router1.start()
         router2.start()
 
         while not stop_event.is_set():
@@ -153,10 +163,11 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     finally:
         ## This is to stop the NED POSITION REQUEST
         # stop_msg(ap_conn, MsgID.LOCAL_POSITION_NED)
-        # router1.join()
+        router1.join()
         router2.join()
         log_file.close()
         # ap_conn.close()
+        px4_conn.close()
         lg_conn.close()
         rid_sock.close(linger=0)
         zmq_ctx.term()
