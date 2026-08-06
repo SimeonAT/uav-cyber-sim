@@ -15,12 +15,13 @@ import pymavlink.dialects.v20.ardupilotmega as mavlink
 import zmq
 
 # First Party imports
-from simulator.config import DATA_PATH, BasePort
+from simulator.config import DATA_PATH, BasePort, ap_to_px4_offset
 from simulator.helpers.connections import (
     MAVConnection,
     create_tcp_conn,
     create_zmq_socket,
 )
+from simulator.helpers.connections.mavlink.conn import create_udp_conn
 from simulator.helpers.connections.mavlink.enums import DataStream, MsgID
 from simulator.helpers.connections.mavlink.streams import (
     ask_msg,
@@ -60,6 +61,15 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     #     src_sysid=sysid,
     #     src_compid=141,
     # )
+
+    px4_conn = create_udp_conn(
+        base_port=BasePort.PX4,
+        offset=ap_to_px4_offset(port_offset),
+        mode="receiver",
+        src_sysid=sysid,
+        src_compid=141
+    )
+    logging.debug(f"PX4 UDP Connection: {px4_conn}")
     lg_conn = create_tcp_conn(
         base_port=BasePort.LOG,
         offset=port_offset,

@@ -80,6 +80,11 @@ def px4_offboard_port(base_port=BasePort.PX4, port_offset=0):
     sdk_udp_port = 14549
   return sdk_udp_port
 
+def ap_to_px4_offset(ap_port_offset):
+  assert(ap_port_offset % 10 == 0)
+  port_offset = int(ap_port_offset / 10)
+  return 9 if port_offset > 9 else port_offset
+
 # --- UAV Visualization Colors ---
 class Color(StrEnum):
     """Enum for supported UAV marker colors in visualizations."""
