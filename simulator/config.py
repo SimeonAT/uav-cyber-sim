@@ -37,7 +37,6 @@ PX4_DATA_PATH = (ROOT / "data" / "px4").resolve()
 # Ensure logs directory exists (can be cleaned later)
 ARDU_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 
-
 class BasePort(IntEnum):
     """
     Base ports for QGroundControl(QGC), ArduPilot (ARP), Ground control Station (GCS),
@@ -50,10 +49,6 @@ class BasePort(IntEnum):
     All components except QGC connect to the UAVLogic.
     QGC connects directly to ArduPilot (SITL).
     Gazebo connects to ArduPilot via UDP 9002 (to ArduPilot) and 9003 (from ArduPilot).
-
-    UCI NOTE: PX4 UDP offboard base port starts at 14540 and will be +1 for each instance < 9.
-    All instances >= 9 will be assigned to port 14549.
-    https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
     """
 
     # ONE-PER-UAV PORTS
@@ -68,12 +63,22 @@ class BasePort(IntEnum):
     RID_DATA = 14558  # Remote ID (PROXY->LOGIC) internal
 
     # PX4 PORTS
-    PX4 = 14540
-    PX4_QGC = 14550
+    PX4 = 14540         # PX4 onboard base port (UDP: PROXY -> PX4)
+    PX4_QGC = 14550     # QGroundControl (UDP: QGC -> PX4)
 
     # ONE-PER-GCS PORTS
     GCS_ZMQ = 30000  # GCS ZMQ (GCS->ORC)
 
+"""
+PX4 UDP offboard base port starts at 14540 and will be +1 for each instance < 9.
+    All instances >= 9 will be assigned to port 14549.
+    https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
+"""
+def px4_offboard_port(base_port=BasePort.PX4, port_offset=0):
+  sdk_udp_port = base_port + port_offset
+  if sdk_udp_port > 14549:
+    sdk_udp_port = 14549
+  return sdk_udp_port
 
 # --- UAV Visualization Colors ---
 class Color(StrEnum):

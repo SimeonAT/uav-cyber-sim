@@ -23,7 +23,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
-from simulator.config import ARDUPILOT_GAZEBO_MODELS, PX4_GAZEBO_MODELS, ENV_CMD_GAZ, Color
+from simulator.config import (
+    ARDUPILOT_GAZEBO_MODELS, PX4_GAZEBO_MODELS, 
+    ENV_CMD_GAZ, Color, px4_offboard_port
+)
 from simulator.helpers.coordinates import XYZRPY, ENUPose, GRAPose
 from simulator.helpers.math import heading_to_yaw
 from simulator.helpers.processes import create_process
@@ -184,9 +187,7 @@ class Gazebo(Visualizer[GazVehicle]):
             # to MAVLink port `14549`.
             # https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
             #
-            sdk_udp_port = 14540 + i
-            if sdk_udp_port > 14549:
-              sdk_udp_port = 14549
+            sdk_udp_port = px4_offboard_port(port_offset=i)
 
             sdf = self._create_drone_model_sdf(
               new_model_path,
