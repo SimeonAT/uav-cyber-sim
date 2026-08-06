@@ -142,14 +142,13 @@ class Gazebo(Visualizer[GazVehicle]):
 
     def _create_drone_model_sdf(self, sdf_path: Path,
                                 mavlink_tcp_port=4560,
-                                mavlink_udp_port=14560,
                                 sdk_udp_port=14540,
                                 qgc_udp_port=14550):
       env = Environment(loader=FileSystemLoader(sdf_path))
       template = env.get_template("iris.sdf.jinja")
       return template.render({
         "mavlink_tcp_port": mavlink_tcp_port,
-        "mavlink_udp_port": mavlink_udp_port,
+        "mavlink_udp_port": 14560,
         "serial_enabled": 0,
         "serial_device": "/dev/ttyACM0",
         "serial_baudrate": 921600,
@@ -188,7 +187,7 @@ class Gazebo(Visualizer[GazVehicle]):
             sdf = self._create_drone_model_sdf(
               new_model_path,
               mavlink_tcp_port=4560 + i,
-              mavlink_udp_port=14560 + i,
+              mavlink_udp_port=14560,
               sdk_udp_port=sdk_udp_port,
               qgc_udp_port=14550
             )
