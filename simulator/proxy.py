@@ -135,8 +135,8 @@ def start_proxy(sysid: int, port_offset: int) -> None:
 
         while not stop_event.is_set():
             try:
-                # while not ap_queue.empty() and not stop_event.is_set():
-                #     write_and_log_message(ap_queue, ap_conn, log_writer, "ARP")
+                while not ap_queue.empty() and not stop_event.is_set():
+                    write_and_log_message(ap_queue, px4_conn, log_writer, "PX4")
 
                 while not lg_queue.empty() and not stop_event.is_set():
                     record = write_and_log_message(lg_queue, lg_conn, log_writer, "LOG")
