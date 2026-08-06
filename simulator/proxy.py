@@ -115,7 +115,7 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     router2 = MessageRouter(
         source=lg_conn,
         targets=[ap_queue],
-        labels=["➡️ LOG → ARP"],
+        labels=["➡️ LOG → PX4"],
         sysid=sysid,
         sender="LOG",
         stop_event=stop_event,
@@ -197,8 +197,8 @@ class MessageRouter(threading.Thread):
     def run(self):
         """Continuously receive messages and dispatch them until stopped."""
         while not self.stop_event.is_set():
-            timeout = 1
-            msg = self.source.recv_match(blocking=True, timeout=timeout)
+            # timeout = 1
+            msg = self.source.recv_match(blocking=True)
             if msg and not self.stop_event.is_set():
                 # logging.debug(f"UAV ({self.sysid}): Received {msg}")
                 if (
@@ -217,10 +217,10 @@ class MessageRouter(threading.Thread):
             # 
             #           DON'T FORGET to remove these line when working on adding PX4.
             #
-            else:
-                logging.info(f"Ending simulation when ArduPilot is not present after {timeout} seconds.")
-                logging.info("Going to end simulation.")
-                self.stop_event.set()
+            # else:
+            #     logging.info(f"Ending simulation when ArduPilot is not present after {timeout} seconds.")
+            #     logging.info("Going to end simulation.")
+            #     self.stop_event.set()
 
     def dispatch_message(self, msg: mavlink.MAVLink_message):
         """Send a message to all targets with timestamp and sender."""
