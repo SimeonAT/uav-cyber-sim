@@ -50,6 +50,10 @@ class BasePort(IntEnum):
     All components except QGC connect to the UAVLogic.
     QGC connects directly to ArduPilot (SITL).
     Gazebo connects to ArduPilot via UDP 9002 (to ArduPilot) and 9003 (from ArduPilot).
+
+    UCI NOTE: PX4 UDP offboard base port starts at 14540 and will be +1 for each instance < 9.
+    All instances >= 9 will be assigned to port 14549.
+    https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
     """
 
     # ONE-PER-UAV PORTS
@@ -62,6 +66,10 @@ class BasePort(IntEnum):
     RID_UP = 14556  # Remote ID (LOGIC->ORC)
     RID_DOWN = 14557  # Remote ID (ORC->LOGIC)
     RID_DATA = 14558  # Remote ID (PROXY->LOGIC) internal
+
+    # PX4 PORTS
+    PX4 = 14540
+    PX4_QGC = 14550
 
     # ONE-PER-GCS PORTS
     GCS_ZMQ = 30000  # GCS ZMQ (GCS->ORC)
