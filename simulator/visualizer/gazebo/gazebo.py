@@ -25,7 +25,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from simulator.config import (
     ARDUPILOT_GAZEBO_MODELS, PX4_GAZEBO_MODELS, 
-    ENV_CMD_GAZ, Color, px4_offboard_port
+    ENV_CMD_GAZ, Color, px4_offboard_port, ap_to_px4_offset
 )
 from simulator.helpers.coordinates import XYZRPY, ENUPose, GRAPose
 from simulator.helpers.math import heading_to_yaw
@@ -88,7 +88,7 @@ class Gazebo(Visualizer[GazVehicle]):
         """Launch the Gazebo simulator with the specified UAV and waypoints."""
         base_models = [f"{veh.model}_{veh.color}" for veh in self.vehicles]
         self._generate_drone_models_from_bases(
-            base_models, base_port_in=9002, port_step=10
+            base_models, port_offsets, base_port_in=9002, port_step=10
         )
         updated_world = self._update_world(self.world_path)
         #
@@ -167,6 +167,7 @@ class Gazebo(Visualizer[GazVehicle]):
     def _generate_drone_models_from_bases(
         self,
         base_models: list[str],
+        port_offsets: list[int],
         base_port_in: int = 9002,
         port_step: int = 10,
     ) -> None:
@@ -183,15 +184,33 @@ class Gazebo(Visualizer[GazVehicle]):
 
             sdf_path = new_model_path / "iris.sdf"
 
+            # UCI NOTE: `i` here is just this vehicle's position in the loop (0, 1, 2...) 
+            #           — it has no guaranteed relationship to the actual PX4 instance number 
+            #           this vehicle will be launched with (see `px4_cmd` construction in
+            #           sim.py, which derives `-i` from  `ap_to_px4_offset(port_offsets[j])`,
+            #           not from a raw loop index). `port_offsets[i]` is the real,
+            #           availability-scanned ArduPilot-style offset assigned
+            #           to this vehicle, and running it through `ap_to_px4_offset` is 
+            #           the only way to guarantee this model's mavlink_tcp_port/sdk_udp_port 
+            #           actually match the PX4 instance that will try to connect to it —
+            #           using raw `i` here caused Gazebo to open a model expecting instance 0 
+            #           (port 4560) while PX4 connected as instance 1 (port 4561), a silent 
+            #           mismatch.
+            #
+            #           Code and comment written by Claude AI (Anthropic) during PX4
+            #           migration debugging.
+            #
+            px4_port_offset = ap_to_px4_offset(port_offsets[i])
+
             # All PX4 drone instances `i` after the 9th instance must connect
             # to MAVLink port `14549`.
             # https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
             #
-            sdk_udp_port = px4_offboard_port(port_offset=i)
+            sdk_udp_port = px4_offboard_port(port_offset=px4_port_offset)
 
             sdf = self._create_drone_model_sdf(
               new_model_path,
-              mavlink_tcp_port=4560 + i,
+              mavlink_tcp_port=4560 + px4_port_offset,
               sdk_udp_port=sdk_udp_port,
               qgc_udp_port=14550
             )
