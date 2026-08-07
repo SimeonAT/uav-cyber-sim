@@ -263,16 +263,31 @@ def write_and_log_message(
 
     msg_type = msg.get_type()
     conn.write(bytes(msg.get_msgbuf()))
+
+    # UCI NOTE: Some PX4 messages (e.g. UNKNOWN_290, UNKNOWN_291) aren't in our
+    #           pymavlink dialect definitions, so pymavlink can't decode their
+    #           payload into typed fields — one field (`data`) stays a raw
+    #           bytearray. msg.to_json() calls json.dumps() internally, which
+    #           can't serialize bytearray, so it was throwing a TypeError and
+    #           spamming "Object of type bytearray is not JSON serializable"
+    #           on every one of these messages. Note this only breaks the CSV
+    #           logging below — conn.write() above already sent the message
+    #           successfully, so forwarding was never actually affected.
+    #           Fall back to str(msg.to_dict()) for these so we still log
+    #           something instead of losing the row.
+    #
+    #           Code changes and comment written by Claude AI (Anthropic) during 
+    #           PX4 migration debugging.
+    #
     if msg_type != "BAD_DATA":
-        log_writer.writerow(
-            [
-                sender,
-                recipient,
-                time_received,
-                time.time(),
-                msg.to_json(),
-            ]
-        )
+        try:
+            message_repr = msg.to_json()
+        except TypeError:
+            message_repr = str(msg.to_dict())
+        log_writer.writerow([
+            sender, recipient, time_received, time.time(), message_repr,
+        ])
+
     return sender, time_received, msg
 
 
