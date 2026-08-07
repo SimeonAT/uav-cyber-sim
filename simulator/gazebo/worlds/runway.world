@@ -34,7 +34,7 @@
           
           - PX4 lockstep docs: https://docs.px4.io/main/en/sim_gazebo_classic/
 
-        Diagnosis, fix recommendatio, and comment written by Claude AI (Anthropic).
+        Diagnosis, fix recommendation, and comment written by Claude AI (Anthropic).
       -->
       <real_time_update_rate>500</real_time_update_rate>
       <max_step_size>0.0020</max_step_size>
