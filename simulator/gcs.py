@@ -94,8 +94,8 @@ class GCS(UAVMonitor):
     ###
     def run(self):
         """Run the GCS monitoring loop until all UAVs complete their missions."""
-        # with futures.ThreadPoolExecutor() as executor:
-        #     executor.map(self._monitor_uav, self.sysids)
+        with futures.ThreadPoolExecutor() as executor:
+            executor.map(self._monitor_uav, self.sysids)
 
         logging.info("All UAVs assigned have completed their missions")
         self.orc_sock.send_string("DONE")  # type: ignore

@@ -214,12 +214,12 @@ class Oracle:  # UAVMonitor
             f"{len(self.gcs_socks)} GCSs"
         )
 
-        # for thread in self.rid_in_threads.values():
-        #     thread.start()
-        # for thread in self.rid_out_threads.values():
-        #     thread.start()
-        # for thread in self.gcs_threads.values():
-        #     thread.start()
+        for thread in self.rid_in_threads.values():
+            thread.start()
+        for thread in self.rid_out_threads.values():
+            thread.start()
+        for thread in self.gcs_threads.values():
+            thread.start()
 
         while any(thread.is_alive() for thread in self.gcs_threads.values()):
             time.sleep(0.1)
