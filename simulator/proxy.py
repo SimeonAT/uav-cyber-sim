@@ -46,8 +46,8 @@ def main() -> None:
     system_id, port_offset, verbose = parse_arguments()
 
     # UCI TODO: Set verbosity from debug level `2` back to variable value `verbose`.
-    setup_logging(f"proxy_{system_id}", verbose=2, console_output=True)
-    logging.debug("Hello World! Starting the Proxy!")
+    setup_logging(f"proxy_{system_id}", verbose=verbose, console_output=True)
+    logging.info("Hello World! Starting the Proxy!")
 
     start_proxy(system_id, port_offset)
 
@@ -69,7 +69,7 @@ def start_proxy(sysid: int, port_offset: int) -> None:
         src_sysid=sysid,
         src_compid=141
     )
-    logging.debug(f"PX4 UDP Connection: {px4_conn}")
+    logging.info(f"PX4 UDP Connection: {px4_conn}")
     lg_conn = create_tcp_conn(
         base_port=BasePort.LOG,
         offset=port_offset,

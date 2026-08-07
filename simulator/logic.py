@@ -37,7 +37,7 @@ def main():
     """Entry point for the Multi-UAV MAVLink Proxy."""
     config_path, verbose = parse_arguments()
     config = VehicleLogic.load_config(config_path)
-    setup_logging(f"logic_{config['sysid']}", verbose=verbose or 1, console_output=True)
+    setup_logging(f"logic_{config['sysid']}", verbose=2, console_output=True)
     start_logic(config)
 
 
