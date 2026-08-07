@@ -29,3 +29,54 @@ start-px4:
 
 jinja:
 	python3 ./jinja.py
+
+# A zombie (Z-state) process is already dead — it's just waiting
+# for its parent to call wait()/reap it. `kill -9` on a zombie
+# PID does nothing, since there's no running code left to signal.
+# `kill-sim` below kills the *live* px4/gzserver/gzclient/proxy/
+# logic processes so they stop accumulating further zombies.
+# Existing zombies only clear once their parent (almost
+# certainly the Jupyter kernel, per the notebook-based dev loop)
+# either reaps them or exits — if `zombies` still shows a
+# nonzero count after `kill-sim`, restart the kernel next.
+#
+# All of the code below, along with this comment, was written by Claude AI (Anthropic).
+
+clean-processes: kill-sim zombies clean ports
+
+# Kill all live (non-zombie) sim-related processes.
+kill-sim:
+	-pkill -9 -f "bin/px4"
+	-pkill -9 -f "gzserver"
+	-pkill -9 -f "gzclient"
+	-pkill -9 -f "simulator.proxy"
+	-pkill -9 -f "simulator.logic"
+	@echo "Killed live px4/gzserver/gzclient/proxy/logic processes (if any were running)."
+
+# Report current zombie count, grouped by process name, so you can tell
+# whether a kernel restart actually cleared them.
+zombies:
+	@echo "Zombie process count by name:"
+	@ps aux | awk '$$8 ~ /Z/ {print $$11}' | sort | uniq -c | sort -rn
+
+# Report what's actually bound on the ports this project cares about.
+# Falls back to /proc if neither ss nor lsof is installed.
+ports:
+	@echo "Checking 4560 / 14540-14549 / 14580-14589 ..."
+	@if command -v ss >/dev/null 2>&1; then \
+		sudo ss -tulnp | grep -E "4560|1454[0-9]|1458[0-9]" || echo "Nothing bound."; \
+	elif command -v lsof >/dev/null 2>&1; then \
+		sudo lsof -i -P -n | grep -E "4560|1454[0-9]|1458[0-9]" || echo "Nothing bound."; \
+	else \
+		echo "Neither ss nor lsof installed — install one with:"; \
+		echo "  sudo apt update && sudo apt install -y iproute2   # for ss"; \
+		echo "  sudo apt update && sudo apt install -y lsof       # for lsof"; \
+	fi
+
+# Full cleanup pass: kill live processes, then report what's left.
+clean: kill-sim
+	@sleep 1
+	@$(MAKE) zombies
+	@echo ""
+	@echo "If zombie count above is still nonzero, restart the Jupyter kernel —"
+	@echo "zombies only clear when their parent process reaps or exits."
