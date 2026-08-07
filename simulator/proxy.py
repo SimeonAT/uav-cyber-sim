@@ -46,7 +46,7 @@ def main() -> None:
     system_id, port_offset, verbose = parse_arguments()
 
     # UCI TODO: Set verbosity from debug level `2` back to variable value `verbose`.
-    setup_logging(f"proxy_{system_id}", verbose=verbose, console_output=True)
+    setup_logging(f"proxy_{system_id}", verbose=2, console_output=True)
     logging.info("Hello World! Starting the Proxy!")
 
     start_proxy(system_id, port_offset)
