@@ -18,6 +18,7 @@ from simulator.config import (
     PX4_BUILD_PATH,
     PX4_DATA_PATH,
     BasePort,
+    ap_to_px4_offset,
 )
 from simulator.helpers.processes import create_process
 from simulator.helpers.setup_log import setup_logging
@@ -169,7 +170,7 @@ class Simulator(Generic[V]):
                         "port_offset": self.uav_port_offsets[j],
                         "px4_cmd": (
                             f"{PX4_BUILD_PATH}/bin/px4"
-                            f" -i {j}"
+                            f" -i {ap_to_px4_offset(self.uav_port_offsets[j])}"
                             f" -d"
                             f" -w {PX4_DATA_PATH}"
                             f" {PX4_BUILD_PATH}/etc"
