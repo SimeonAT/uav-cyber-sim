@@ -20,6 +20,10 @@ from simulator.planner.actions import (
 )
 from simulator.planner.step import Step
 
+from simulator.helpers.connections.mavlink.enums import (
+  CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL
+)
+
 P = TypeVar("P", bound="Plan")
 
 ActionSequence = Action[Action[Step]]
@@ -123,7 +127,14 @@ class Plan(ActionSequence, ABC):
         """Create a plan to execute a mission in auto mode."""
         actions = ActionSequence(name, emoji="🔐")
         actions.add(make_pre_arm())
-        actions.add(make_set_mode(CopterMode.GUIDED))
+        #
+        # Setting PX4 Guided Mode by following the configurations described in
+        # this PX4 forum post:
+        # https://discuss.px4.io/t/mav-cmd-do-set-mode-all-possible-modes/8495/2
+        #
+        actions.add(make_set_mode(base_mode=209, 
+                                  main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
+                                  sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND))
         if navigation_speed != 5:
             actions.add(make_change_nav_speed(speed=navigation_speed))
         actions.add(make_arm())
