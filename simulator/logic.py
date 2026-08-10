@@ -156,6 +156,21 @@ class VehicleLogic:
                                         main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
                                         sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LOITER)
         self.set_loiter.bind(self.conn, self.gra_origin)
+        #
+        # Both "Brake" and "Loiter" modes are defined in ArduPilot, where "Loiter" allows
+        # for the vehicle to be remote controlled while "Brake" doesn't allow this.
+        #   - https://ardupilot.org/copter/docs/loiter-mode.html
+        #   - https://ardupilot.org/copter/docs/brake-mode.html
+        # 
+        # PX4 only has "Hold" mode, which functions like "Loiter"; there is no corresponding mode
+        # in PX4 which supports the features defined in ArduPilot's brake.
+        # https://docs.px4.io/main/en/flight_modes_mc/hold
+        #
+        # We correspond the "brake" action of a drone to PX4's "Hold" mode, as it is the PX4
+        # flight mode that most closely matches the action of braking.
+        #
+        # This recommendation was given by Claude AI (Anthropic).
+        #
         self.set_brake = make_set_mode(base_mode=217,
                          main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
                          sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LOITER)
