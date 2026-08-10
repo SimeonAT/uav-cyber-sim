@@ -17,10 +17,12 @@ class SwitchMode(Step):
     """Step to switch the UAV flight mode."""
 
     def __init__(self, name: str,
+                 base_mode: int,
                  main_mode: CustomMainMode,
                  sub_mode: CustomSubModeAuto | CustomSubModePOSCTL) -> None:
         super().__init__(name)
         # self.flight_mode = flight_mode
+        self.base_mode = base_mode
         self.main_mode = main_mode
         self.sub_mode = sub_mode
 
@@ -33,7 +35,7 @@ class SwitchMode(Step):
         # )
         self.conn.mav.command_long_send(self.conn.target_system, self.conn.target_component,
                                         mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0,
-                                        self.main_mode, self.sub_mode, 0, 0,
+                                        self.base_mode, self.main_mode, self.sub_mode, 0,
                                         0, 0, 0)
 
     # def check_fn(self) -> bool:
@@ -78,12 +80,13 @@ class SwitchMode(Step):
 #     action.add(step)
 #     return action
 
-def make_set_mode(main_mode: CustomMainMode,
+def make_set_mode(base_mode: int,
+                  main_mode: CustomMainMode,
                   sub_mode: CustomSubModeAuto | CustomSubModePOSCTL) -> Action[Step]:
     """Create an Action to switch the UAV flight mode."""
     name = Action.Names.CHANGE_FLIGHTMODE
     action = Action[Step](name, emoji=name.emoji)
-    step = SwitchMode(name=f"Switch to {main_mode.name} + {sub_mode.name}",
-                      main_mode=main_mode, sub_mode=sub_mode)
+    step = SwitchMode(name=f"Switch to base mode: {base_mode}, {main_mode.name} + {sub_mode.name}",
+                      base_mode=base_mode, main_mode=main_mode, sub_mode=sub_mode)
     action.add(step)
     return action
