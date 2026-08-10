@@ -149,8 +149,8 @@ class VehicleLogic:
                                         sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND)
         self.set_guided.bind(self.conn, self.gra_origin)
         self.set_auto = make_set_mode(base_mode=156, 
-                                        main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
-                                        sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_MISSION)
+                                      main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
+                                      sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_MISSION)
         self.set_auto.bind(self.conn, self.gra_origin)
         self.set_loiter = make_set_mode(CopterMode.LOITER)
         self.set_loiter.bind(self.conn, self.gra_origin)
