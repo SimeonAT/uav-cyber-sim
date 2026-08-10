@@ -28,6 +28,10 @@ from simulator.planner import Action, Plan, PlanSpec, State, Step
 from simulator.planner.actions import make_set_mode
 from simulator.planner.actions.navigation import GoTo
 
+from simulator.helpers.connections.mavlink.enums import (
+  CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL
+)
+
 # TODO: Refactor this module
 heartbeat_event = mavutil.periodic_event(HEARTBEAT_FREQUENCY)
 rid_event = mavutil.periodic_event(REMOTE_ID_FREQUENCY)
@@ -137,7 +141,9 @@ class VehicleLogic:
         self.plan.bind(self.conn, self.gra_origin)
 
         # Avoidance Actions
-        self.set_guided = make_set_mode(CopterMode.GUIDED)
+        self.set_guided = make_set_mode(base_mode=209, 
+                                        main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
+                                        sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND)
         self.set_guided.bind(self.conn, self.gra_origin)
         self.set_auto = make_set_mode(CopterMode.AUTO)
         self.set_auto.bind(self.conn, self.gra_origin)
