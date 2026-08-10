@@ -25,15 +25,24 @@ class ClearMission(Step):
             self.conn.target_system, self.conn.target_component
         )
 
+    # def check_fn(self) -> bool:
+    #     """Verify that cleared mission was successful."""
+    #     msg = self.conn.recv_match(type="STATUSTEXT")
+
+    #     if msg and msg.text == "ArduPilot Ready":
+    #         logging.info(
+    #             f"🧹 Vehicle {self.conn.target_system}: Cleared previous mission"
+    #         )
+    #         return True
+    #     return False
+
     def check_fn(self) -> bool:
-        """Verify that cleared mission was successful."""
-        msg = self.conn.recv_match(type="STATUSTEXT")
-        if msg and msg.text == "ArduPilot Ready":
-            logging.info(
-                f"🧹 Vehicle {self.conn.target_system}: Cleared previous mission"
-            )
-            return True
-        return False
+      """Verify that cleared mission was successful."""
+      msg = self.conn.recv_match(type="MISSION_ACK")
+      if msg:
+          logging.info(f"Received Mission ACK: {msg}")
+
+      return False
 
 
 class UploadMission(Step):
