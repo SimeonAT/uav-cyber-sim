@@ -144,17 +144,21 @@ class VehicleLogic:
         # Setting PX4 flight modes by following the configurations in this PX4 forum post:
         # https://discuss.px4.io/t/mav-cmd-do-set-mode-all-possible-modes/8495/2
         #
-        self.set_guided = make_set_mode(base_mode=209, 
+        self.set_guided = make_set_mode(base_mode=209,
                                         main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
                                         sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND)
         self.set_guided.bind(self.conn, self.gra_origin)
-        self.set_auto = make_set_mode(base_mode=156, 
+        self.set_auto = make_set_mode(base_mode=156,
                                       main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
                                       sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_MISSION)
         self.set_auto.bind(self.conn, self.gra_origin)
-        self.set_loiter = make_set_mode(CopterMode.LOITER)
+        self.set_loiter = make_set_mode(base_mode=217,
+                                        main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
+                                        sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LOITER)
         self.set_loiter.bind(self.conn, self.gra_origin)
-        self.set_brake = make_set_mode(CopterMode.BRAKE)
+        self.set_brake = make_set_mode(base_mode=217,
+                         main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
+                         sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LOITER)
         self.set_brake.bind(self.conn, self.gra_origin)
 
         self.mode = CopterMode.AUTO
