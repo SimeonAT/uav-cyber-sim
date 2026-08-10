@@ -36,12 +36,39 @@ class SwitchMode(Step):
                                         self.main_mode, self.sub_mode, 0, 0,
                                         0, 0, 0)
 
+    # def check_fn(self) -> bool:
+    #     """Verify the UAV has switched to the target flight mode."""
+    #     msg = self.conn.recv_match(type="HEARTBEAT")
+    #     if msg and msg.custom_mode == self.flight_mode.value:
+    #         return True
+    #     return False
+
     def check_fn(self) -> bool:
-        """Verify the UAV has switched to the target flight mode."""
-        msg = self.conn.recv_match(type="HEARTBEAT")
-        if msg and msg.custom_mode == self.flight_mode.value:
-            return True
+      """
+      Verify the UAV has switched to the target flight mode.
+      This function was written by Claude AI (Anthropic).
+      
+      PX4 packs `custom_mode` as a union (see px4_custom_mode.h):
+      reserved (bits 0-15), main_mode (bits 16-23), sub_mode (bits 24-31)
+      
+      So the raw uint32 from HEARTBEAT has to be unpacked before comparing
+      against self.main_mode / self.sub_mode, unlike ArduPilot's flat
+      custom_mode integer.
+      """
+      msg = self.conn.recv_match(type="HEARTBEAT")
+      if not msg:
         return False
+
+      recv_main_mode = (msg.custom_mode >> 16) & 0xFF
+      recv_sub_mode = (msg.custom_mode >> 24) & 0xFF
+
+      if recv_main_mode != self.main_mode:
+        return False
+
+      if recv_sub_mode != self.sub_mode:
+        return False
+
+      return True
 
 # def make_set_mode(flight_mode: CopterMode) -> Action[Step]:
 #     """Create an Action to switch the UAV flight mode."""
