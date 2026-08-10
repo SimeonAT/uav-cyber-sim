@@ -19,6 +19,10 @@ from .paramtype import ParamType
 from .sensorflag import SensorFlag
 from .type import Type
 
+from .flightmodepx4 import (
+  CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL
+)
+
 __all__ = [
     "Autopilot",
     "Cmd",
