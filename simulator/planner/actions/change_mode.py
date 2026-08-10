@@ -5,7 +5,9 @@ Includes logic for creating a mode-switching Action with execution and verificat
 steps based on HEARTBEAT messages and supported flight modes.
 """
 
-from simulator.helpers.connections.mavlink.enums import CopterMode, ModeFlag
+from simulator.helpers.connections.mavlink.enums import (
+  CopterMode, ModeFlag, CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL
+)
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
