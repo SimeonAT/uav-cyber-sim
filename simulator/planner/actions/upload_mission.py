@@ -40,11 +40,13 @@ class ClearMission(Step):
 
     def check_fn(self) -> bool:
       """Verify that cleared mission was successful."""
-      msg = self.conn.recv_match(type="MISSION_ACK")
+      msg = self.conn.recv_match(type="MISSION_ACK", blocking=False)
       if msg:
           logging.info(f"Received Mission ACK: {msg}")
           return True
       else:
+        logging.info(f"Failed to receive MISSION_ACK")
+        time.sleep(5)
         return False
 
 
