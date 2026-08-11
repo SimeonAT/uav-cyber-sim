@@ -46,7 +46,6 @@ class ClearMission(Step):
           return True
       else:
         logging.info(f"Failed to receive MISSION_ACK")
-        time.sleep(5)
         return False
 
 
