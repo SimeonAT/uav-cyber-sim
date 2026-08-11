@@ -78,10 +78,10 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     )
 
     ## ASK NED POSITION for REMOTE ID
-    # ask_msg(ap_conn, MsgID.GLOBAL_POSITION_INT, interval=RID_INTERVAL)
-    # request_sensor_streams(
-    #     ap_conn, stream_ids=DATA_STREAM_IDS, rate_hz=DATA_STREAM_FREQUENCY
-    # )
+    ask_msg(px4_conn, MsgID.GLOBAL_POSITION_INT, interval=RID_INTERVAL)
+    request_sensor_streams(
+        px4_conn, stream_ids=DATA_STREAM_IDS, rate_hz=DATA_STREAM_FREQUENCY
+    )
 
     ap_queue = Queue[tuple[str, float, mavlink.MAVLink_message]]()
     lg_queue = Queue[tuple[str, float, mavlink.MAVLink_message]]()
@@ -161,7 +161,7 @@ def start_proxy(sysid: int, port_offset: int) -> None:
                 logging.error(f"Unexpected error (sysid {sysid}): {e}")
     finally:
         ## This is to stop the NED POSITION REQUEST
-        # stop_msg(ap_conn, MsgID.LOCAL_POSITION_NED)
+        stop_msg(px4_conn, MsgID.LOCAL_POSITION_NED)
         router1.join()
         router2.join()
         log_file.close()
