@@ -21,28 +21,31 @@ class ClearMission(Step):
 
     def exec_fn(self) -> None:
         """Execute the clear mission."""
+        logging.info("--- Clearing Mission! ---")
         self.conn.mav.mission_clear_all_send(
             self.conn.target_system, self.conn.target_component
         )
-
-    def check_fn(self) -> bool:
-        """Verify that cleared mission was successful."""
-        msg = self.conn.recv_match(type="STATUSTEXT")
-
-        if msg and msg.text == "ArduPilot Ready":
-            logging.info(
-                f"🧹 Vehicle {self.conn.target_system}: Cleared previous mission"
-            )
-            return True
-        return False
+        logging.info("--- Clearing Mission Done! ---")
 
     # def check_fn(self) -> bool:
-    #   """Verify that cleared mission was successful."""
-    #   msg = self.conn.recv_match(type="MISSION_ACK")
-    #   if msg:
-    #       logging.info(f"Received Mission ACK: {msg}")
+    #     """Verify that cleared mission was successful."""
+    #     msg = self.conn.recv_match(type="STATUSTEXT")
 
-    #   return False
+    #     if msg and msg.text == "ArduPilot Ready":
+    #         logging.info(
+    #             f"🧹 Vehicle {self.conn.target_system}: Cleared previous mission"
+    #         )
+    #         return True
+    #     return False
+
+    def check_fn(self) -> bool:
+      """Verify that cleared mission was successful."""
+      msg = self.conn.recv_match(type="MISSION_ACK")
+      if msg:
+          logging.info(f"Received Mission ACK: {msg}")
+          return True
+      else:
+        return False
 
 
 class UploadMission(Step):
