@@ -69,7 +69,6 @@ def start_proxy(sysid: int, port_offset: int) -> None:
         src_sysid=sysid,
         src_compid=141
     )
-    logging.info(f"PX4 UDP Connection: {px4_conn}")
     lg_conn = create_tcp_conn(
         base_port=BasePort.LOG,
         offset=port_offset,

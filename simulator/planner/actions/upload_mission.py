@@ -45,7 +45,6 @@ class ClearMission(Step):
           logging.info(f"Received Mission ACK: {msg}")
           return True
       else:
-        logging.info(f"Failed to receive MISSION_ACK")
         return False
 
 

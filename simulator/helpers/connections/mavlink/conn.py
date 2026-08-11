@@ -74,7 +74,17 @@ def create_tcp_conn(
         try:
             conn = connect(device_str, src_sysid, src_compid)
             conn.mav.heartbeat_send(sys_type, ardupilot, 0, 0, 0)
-            conn.wait_heartbeat()
+
+            if not is_client:
+              logging.info("Server is looking for heartbeat.")
+              while conn.target_system != 0:
+                conn.wait_heartbeat()
+                logging.info(f"Server has system {conn.target_system}")
+            else:
+              conn.wait_heartbeat()
+
+            logging.info("Heartbeat from system (system %u component %u) for %s" % 
+                        (conn.target_system, conn.target_component, device_str))
             return conn
         except Exception as e:
             if not is_client:
