@@ -20,12 +20,11 @@ class ClearMission(Step):
     """Step to clear previous mission from the UAV."""
 
     def exec_fn(self) -> None:
-        """Execute the clear mission."""
-        logging.info("--- Clearing Mission! ---")
-        self.conn.mav.mission_clear_all_send(
-            self.conn.target_system, self.conn.target_component
-        )
-        logging.info("--- Clearing Mission Done! ---")
+      """Execute the clear mission."""
+      self.conn.mav.mission_clear_all_send(
+          self.conn.target_system, self.conn.target_component
+      )
+      logging.info(f"Sent Clear Mission Request for Vehicle: {self.conn.target_system}")
 
     # def check_fn(self) -> bool:
     #     """Verify that cleared mission was successful."""
@@ -45,6 +44,8 @@ class ClearMission(Step):
           logging.info(f"Received Mission ACK: {msg}")
           return True
       else:
+        # If we did not receive a Mission ACK, send the `CLEAR_MISSION_ALL` request again.
+        self.exec_fn()
         return False
 
 
