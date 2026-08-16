@@ -18,6 +18,7 @@ from simulator.planner.step import Step
 
 class ClearMission(Step):
     """Step to clear previous mission from the UAV."""
+    timeout = 0.1
 
     def exec_fn(self) -> None:
       """Execute the clear mission."""
@@ -39,7 +40,7 @@ class ClearMission(Step):
 
     def check_fn(self) -> bool:
       """Verify that cleared mission was successful."""
-      msg = self.conn.recv_match(type="MISSION_ACK")
+      msg = self.conn.recv_match(type="MISSION_ACK", blocking=False, timeout=ClearMission.timeout)
       if msg:
           logging.info(f"Received Mission ACK: {msg}")
           return True
