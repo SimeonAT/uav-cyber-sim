@@ -155,10 +155,13 @@ class CheckSystem(Step):
         name: str,
         required_sensors: tuple[SensorFlag, ...] = (
             SensorFlag.SENSOR_3D_GYRO,
-            SensorFlag.SENSOR_3D_ACCEL,
             SensorFlag.SENSOR_3D_MAG,
             SensorFlag.SENSOR_ABSOLUTE_PRESSURE,
             SensorFlag.SENSOR_GPS,
+            # UCI NOTE: PX4 doesn't enable 3D accelerometer even when healthy.
+            #           As a result, we don't check for it when using PX4.
+            #           https://github.com/PX4/PX4-Autopilot/issues/19380
+            # SensorFlag.SENSOR_3D_ACCEL,
         ),
     ):
         super().__init__(name)
@@ -192,6 +195,7 @@ class CheckSystem(Step):
                 f"⚠️ Vehicle {self.conn.target_system}: Missing or unhealthy sensors: "
                 f"{', '.join(missing)}"
             )
+            
         stop_msg(self.conn, msg_id=MsgID.SYS_STATUS)
         return True
 
