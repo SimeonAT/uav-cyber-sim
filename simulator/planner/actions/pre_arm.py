@@ -158,10 +158,7 @@ class CheckSystem(Step):
             SensorFlag.SENSOR_3D_MAG,
             SensorFlag.SENSOR_ABSOLUTE_PRESSURE,
             SensorFlag.SENSOR_GPS,
-            # UCI NOTE: PX4 doesn't enable 3D accelerometer even when healthy.
-            #           As a result, we don't check for it when using PX4.
-            #           https://github.com/PX4/PX4-Autopilot/issues/19380
-            # SensorFlag.SENSOR_3D_ACCEL,
+            SensorFlag.SENSOR_3D_ACCEL,
         ),
     ):
         super().__init__(name)
@@ -184,11 +181,25 @@ class CheckSystem(Step):
             )
         healthy = msg.onboard_control_sensors_health
         enabled = msg.onboard_control_sensors_enabled
-        missing = [
-            req_sensor.name
-            for req_sensor in self.required_sensors
-            if not healthy & enabled & req_sensor
-        ]
+
+        # UCI NOTE: PX4 doesn't enable 3D accelerometer even when healthy.
+        #           As a result, don't worry about if it is enabled when using PX4.
+        #           https://github.com/PX4/PX4-Autopilot/issues/19380
+        #
+        missing = []
+        for req_sensor in self.required_sensors:
+          if req_sensor == SensorFlag.SENSOR_3D_ACCEL:
+            if not healthy & req_sensor:
+              missing.append(req_sensor.name)
+          else:
+             if not healthy & enabled & req_sensor:
+              missing.append(req_sensor.name)
+
+        # missing = [
+        #     req_sensor.name
+        #     for req_sensor in self.required_sensors
+        #     if not healthy & enabled & req_sensor
+        # ]
 
         if missing:
             raise Exception(
