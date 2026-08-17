@@ -25,7 +25,7 @@ class ClearMission(Step):
       self.conn.mav.mission_clear_all_send(
           self.conn.target_system, self.conn.target_component
       )
-      logging.info(f"Sent Clear Mission Request for Vehicle: {self.conn.target_system}")
+      # logging.info(f"Sent Clear Mission Request for Vehicle: {self.conn.target_system}")
 
     # def check_fn(self) -> bool:
     #     """Verify that cleared mission was successful."""

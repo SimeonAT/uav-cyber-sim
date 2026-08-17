@@ -71,8 +71,6 @@ class EstimatorStatusCheck(Step):
     """Check whether all required Estimator flags are set."""
     msg = self.conn.recv_match(type="ESTIMATOR_STATUS", blocking=False, timeout=0.1)
     if not msg:
-      # Retransmit `ESTIMATOR_STATUS` request if not seen.
-      self.exec_fn()
       return False
       
     missing = [
@@ -112,8 +110,6 @@ class EKFStatus(Step):
         """Check whether all required EKF flags are set."""
         msg = self.conn.recv_match(type="EKF_STATUS_REPORT", blocking=False, timeout=0.1)
         if not msg:
-            # Retransmit `EKF_STATUS_REPORT` request if not seen.
-            self.exec_fn()
             return False
         missing = [
             flag.name for flag in self.required_ekf_flags if not msg.flags & flag
