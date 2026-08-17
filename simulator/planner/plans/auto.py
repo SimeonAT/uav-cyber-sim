@@ -14,8 +14,6 @@ from simulator.planner.actions import make_start_mission, make_upload_mission
 from simulator.planner.actions.monitoring import make_monitoring
 from simulator.planner.plan import Plan, PlanSpec
 
-import logging
-
 @Plan.register("AutoPlan")
 class AutoPlan(Plan):
     """A UAV plan in auto mode to execute a mission file."""
@@ -166,8 +164,7 @@ class AutoPlan(Plan):
         self, sysid: int, gra_wps: GRAs, land: bool = True, speed: float = 5.0
     ) -> None:
         """Save the mission to file."""
-        logging.info("--- Hello World! I'm in the `save_basic_mission` class method! ---")
-
+        print("Hello world from `save_basic_mission`!!!")
         self.wps = gra_wps
         mission_loader = MissionLoader(sysid, target_component=0)
         mission_loader.add_latlonalt(
