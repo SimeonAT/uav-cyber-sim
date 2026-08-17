@@ -76,12 +76,12 @@ class EstimatorStatusCheck(Step):
       return False
       
     missing = [
-        flag.name for flag in self.required_estimator_flags if not msg.flags & flag
+      flag.name for flag in self.required_estimator_flags if not msg.flags & flag
     ]
     if missing:
       logging.debug(
-          f"🛰️ Vehicle {self.conn.target_system}: Waiting for Estimator status to be ready... "
-          f"Pending: {', '.join(missing)}"
+        f"🛰️ Vehicle {self.conn.target_system}: Waiting for Estimator status to be ready... "
+        f"Pending: {', '.join(missing)}"
       )
       return False
 
