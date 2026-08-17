@@ -66,10 +66,8 @@ class EKFStatus(Step):
 
     def check_fn(self) -> bool:
         """Check whether all required EKF flags are set."""
-        msg = self.conn.recv_match(type="EKF_STATUS_REPORT", blocking=False, timeout=0.1)
+        msg = self.conn.recv_match(type="EKF_STATUS_REPORT")
         if not msg:
-            # Retransmit `EKF_STATUS_REPORT` request if not seen.
-            self.exec_fn()
             return False
         missing = [
             flag.name for flag in self.required_ekf_flags if not msg.flags & flag
@@ -79,8 +77,6 @@ class EKFStatus(Step):
                 f"🛰️ Vehicle {self.conn.target_system}: Waiting for EKF to be ready... "
                 f"Pending: {', '.join(missing)}"
             )
-            # Retransmit `EKF_STATUS_REPORT` request if not seen.
-            self.exec_fn()
             return False
         stop_msg(self.conn, msg_id=MsgID.EKF_STATUS_REPORT)
         return True
