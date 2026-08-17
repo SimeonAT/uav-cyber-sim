@@ -206,9 +206,10 @@ def make_pre_arm() -> Action[Step]:
     pre_arm = Action[Step](name=name, emoji=name.emoji)
 
     disarm = CheckDisarmed(name="Check disarmed")
-    ekf_status = EKFStatus(name="Check EKF status")
+    # ekf_status = EKFStatus(name="Check EKF status")
+    estimator_status = EstimatorStatusCheck(name="Check Estimator status")
     gps = GPSStatus(name="Check GPS")
     system = CheckSystem(name="Check system status")
-    for step in [disarm, ekf_status, gps, system]:
+    for step in [disarm, estimator_status, gps, system]:
         pre_arm.add(step)
     return pre_arm
