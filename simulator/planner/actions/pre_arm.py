@@ -62,6 +62,32 @@ class EstimatorStatus(Step):
     self.required_estimator_flags= required_estimator_flags
     return
 
+  def exec_fn(self) -> None:
+    """No execution needed; just checking."""
+    ask_msg(self.conn, MsgID.ESTIMATOR_STATUS)
+    return
+
+  def check_fn(self) -> bool:
+    """Check whether all required Estimator flags are set."""
+    msg = self.conn.recv_match(type="ESTIMATOR_STATUS", blocking=False, timeout=0.1)
+    if not msg:
+      # Retransmit `ESTIMATOR_STATUS` request if not seen.
+      self.exec_fn()
+      return False
+      
+    missing = [
+        flag.name for flag in self.required_estimator_flags if not msg.flags & flag
+    ]
+    if missing:
+      logging.debug(
+          f"🛰️ Vehicle {self.conn.target_system}: Waiting for EKF to be ready... "
+          f"Pending: {', '.join(missing)}"
+      )
+      return False
+
+    stop_msg(self.conn, msg_id=MsgID.EKF_STATUS_REPORT)
+    return True
+
 class EKFStatus(Step):
     """Step to verify that the EKF system is properly initialized."""
 
