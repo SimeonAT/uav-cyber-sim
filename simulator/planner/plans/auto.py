@@ -167,12 +167,20 @@ class AutoPlan(Plan):
         print("Hello world from `save_basic_mission`!!!")
         self.wps = gra_wps
         mission_loader = MissionLoader(sysid, target_component=0)
-        mission_loader.add_latlonalt(
-            lat=self.wps[0].lat,
-            lon=self.wps[0].lon,
-            altitude=0,
-            terrain_alt=False,
-        )
+        #
+        # UCI TODO: In the original source code, `mission_loader.add` for `CmdNav.TAKEOFF`
+        # was added *after* `mission_loader.add_latlonalt`. This results in a path where there
+        # is a waypoint before TAKEOFF command. This doesn't seem to be a problem when ArduPilot
+        # is used; however, PX4 will reject the flight plan with the error
+        # "takeoff not first waypoint item".
+        #
+        # As a result, this function is modified so that `mission_loader.add` for TAKEOFF is
+        # added to the mission plan before the first waypoint set by `mission_loader.add_latlonalt`.
+        #
+        # Investigate is this modification whether this modification is problematic after you
+        # get the single drone simulation working. If we do plan to keep this change, modify
+        # this comment as a "UCI NOTE" to explain why this change is kept.
+        #
         mission_loader.add(
             ItemMsg(
                 sysid,
@@ -188,6 +196,12 @@ class AutoPlan(Plan):
                 0,
                 *self.wps[0],
             )
+        )
+        mission_loader.add_latlonalt(
+            lat=self.wps[0].lat,
+            lon=self.wps[0].lon,
+            altitude=0,
+            terrain_alt=False,
         )
         if speed != 5.0:
             # speed_type = 0 → airspeed, 1 → ground speed, 2 → climb rate
