@@ -46,9 +46,21 @@ class CheckDisarmed(Step):
 
 class EstimatorStatus(Step):
   """Step to verif that the Estimator system is properly initialized.
-     PX4 looks Estimator entries rather than EKF entries."""
-  pass
+     PX4 looks Estimator entries rather than EKF entries.
+     https://docs.px4.io/main/en/msg_docs/EstimatorStatus
+  """
 
+  def __init__(self, name: str,
+    required_estimator_flags: tuple[EstimatorStatus, ...] = (
+      EstimatorStatus.ATTITUDE,
+      EstimatorStatus.VELOCITY_HORIZ,
+      EstimatorStatus.POS_VERT_ABS,
+      EstimatorStatus.POS_HORIZ_ABS,
+    )
+  ):
+    super().__init__(name)
+    self.required_estimator_flags= required_estimator_flags
+    return
 
 class EKFStatus(Step):
     """Step to verify that the EKF system is properly initialized."""
