@@ -80,12 +80,12 @@ class EstimatorStatus(Step):
     ]
     if missing:
       logging.debug(
-          f"🛰️ Vehicle {self.conn.target_system}: Waiting for EKF to be ready... "
+          f"🛰️ Vehicle {self.conn.target_system}: Waiting for Estimator status to be ready... "
           f"Pending: {', '.join(missing)}"
       )
       return False
 
-    stop_msg(self.conn, msg_id=MsgID.EKF_STATUS_REPORT)
+    stop_msg(self.conn, msg_id=MsgID.ESTIMATOR_STATUS)
     return True
 
 class EKFStatus(Step):

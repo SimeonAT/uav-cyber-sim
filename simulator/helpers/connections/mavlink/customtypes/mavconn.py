@@ -9,6 +9,9 @@ from typing import Literal, Protocol, overload
 
 import pymavlink.dialects.v20.ardupilotmega as mavlink
 
+# Dialect used by PX4.
+import pymavlink.dialects.v20.development as px4mavlink
+
 
 class MAVConnection(Protocol):
     """
@@ -64,6 +67,14 @@ class MAVConnection(Protocol):
         timeout: float | None = ...,
         blocking: bool | None = ...,
     ) -> mavlink.MAVLink_ekf_status_report_message | None: ...
+
+    @overload
+    def recv_match(
+        self,
+        type: Literal["ESTIMATOR_STATUS"],
+        timeout: float | None = ...,
+        blocking: bool | None = ...,
+    ) -> px4mavlink.MAVLink_estimator_status_message | None: ...
 
     @overload
     def recv_match(
