@@ -25,7 +25,7 @@ class EkfStatus(IntEnum):
 
 class EstimatorStatus(IntEnum):
   """
-  PX4 uses `ESTIMATOR_` rather than `EKF_`.
+  PX4 uses `ESTIMATOR_` entries, rather than `EKF_` entries.
   - https://mavlink.io/en/messages/common.html#ESTIMATOR_STATUS_FLAGS
   - https://docs.px4.io/main/en/msg_docs/EstimatorStatus
   """

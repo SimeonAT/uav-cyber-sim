@@ -21,6 +21,7 @@ from simulator.helpers.connections.mavlink.enums import (
     ModeFlag,
     MsgID,
     SensorFlag,
+    EstimatorStatus
 )
 from simulator.helpers.connections.mavlink.streams import ask_msg, stop_msg
 from simulator.planner.action import Action
@@ -42,6 +43,11 @@ class CheckDisarmed(Step):
         if msg.base_mode & ModeFlag.SAFETY_ARMED:
             return False
         return True
+
+class EstimatorStatus(Step):
+  """Step to verif that the Estimator system is properly initialized.
+     PX4 looks Estimator entries rather than EKF entries."""
+  pass
 
 
 class EKFStatus(Step):
@@ -66,8 +72,10 @@ class EKFStatus(Step):
 
     def check_fn(self) -> bool:
         """Check whether all required EKF flags are set."""
-        msg = self.conn.recv_match(type="EKF_STATUS_REPORT")
+        msg = self.conn.recv_match(type="EKF_STATUS_REPORT", blocking=False, timeout=0.1)
         if not msg:
+            # Retransmit `EKF_STATUS_REPORT` request if not seen.
+            self.exec_fn()
             return False
         missing = [
             flag.name for flag in self.required_ekf_flags if not msg.flags & flag
