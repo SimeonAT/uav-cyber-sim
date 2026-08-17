@@ -44,7 +44,7 @@ class CheckDisarmed(Step):
             return False
         return True
 
-class EstimatorStatus(Step):
+class EstimatorStatusCheck(Step):
   """Step to verif that the Estimator system is properly initialized.
      PX4 looks Estimator entries rather than EKF entries.
      https://docs.px4.io/main/en/msg_docs/EstimatorStatus

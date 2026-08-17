@@ -10,6 +10,7 @@ from .cmdset import CmdSet
 from .coptermode import CopterMode
 from .datastream import DataStream
 from .ekfstatus import EkfStatus
+from .ekfstatus import EstimatorStatus
 from .frame import Frame
 from .landstate import LandState
 from .missionresult import MissionResult
@@ -42,4 +43,5 @@ __all__ = [
     "SensorFlag",
     "Type",
     "CmdCustom",
+    "EstimatorStatus"
 ]
