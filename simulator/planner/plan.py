@@ -132,9 +132,9 @@ class Plan(ActionSequence, ABC):
         # this PX4 forum post:
         # https://discuss.px4.io/t/mav-cmd-do-set-mode-all-possible-modes/8495/2
         #
-        actions.add(make_set_mode(base_mode=209, 
-                                  main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
-                                  sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND))
+        # actions.add(make_set_mode(base_mode=209, 
+        #                           main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
+        #                           sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND))
         if navigation_speed != 5:
             actions.add(make_change_nav_speed(speed=navigation_speed))
         actions.add(make_arm())
