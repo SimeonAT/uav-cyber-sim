@@ -6,7 +6,6 @@ from simulator.helpers.connections.mavlink.enums import Cmd
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
-
 class StartMission(Step):
     """Step to start the UAV mission."""
 
@@ -26,16 +25,28 @@ class StartMission(Step):
             0,
         )
 
+    # def check_fn(self) -> bool:
+    #     """Check if the mission has started by listening for a STATUSTEXT message."""
+    #     msg = self.conn.recv_match(type="STATUSTEXT")
+    #     if msg:
+    #         text = msg.text.strip().lower()
+    #         if text.startswith("mission"):
+    #             logging.info(
+    #                 f"🚀 Vehicle {self.conn.target_system}: Mission has started"
+    #             )
+    #             return True
+    #     return False
+
     def check_fn(self) -> bool:
-        """Check if the mission has started by listening for a STATUSTEXT message."""
-        msg = self.conn.recv_match(type="STATUSTEXT")
-        if msg:
-            text = msg.text.strip().lower()
-            if text.startswith("mission"):
-                logging.info(
-                    f"🚀 Vehicle {self.conn.target_system}: Mission has started"
-                )
-                return True
+      """Check if the mission has started by listening for a COMMAND_ACK."""
+      msg = self.conn.recv_match(type="COMMAND_ACK", blocking=False, timeout=0.1)
+      if msg:
+          logging.info(f"Received Mission ACK for Mission Start: {msg}")
+          return True
+      else:
+        # If we did not receive a Mission ACK, send the `MISSION_START` request again.
+        logging.info(f"Did not receive Command ACK for Mission Start, sending again.")
+        self.exec_fn()
         return False
 
 
