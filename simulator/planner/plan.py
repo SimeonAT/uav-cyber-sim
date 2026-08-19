@@ -135,6 +135,9 @@ class Plan(ActionSequence, ABC):
         # actions.add(make_set_mode(base_mode=209, 
         #                           main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
         #                           sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND))
+        actions.add(make_set_mode(base_mode=156,
+                                  main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
+                                  sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_MISSION))
         if navigation_speed != 5:
             actions.add(make_change_nav_speed(speed=navigation_speed))
         actions.add(make_arm())
