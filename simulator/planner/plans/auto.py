@@ -239,12 +239,24 @@ class AutoPlan(Plan):
                 )
             )
         for wp in self.wps[1:]:
-            mission_loader.add_latlonalt(
-                lat=wp.lat,
-                lon=wp.lon,
-                altitude=wp.alt,
-                terrain_alt=False,
-            )
+          # mission_loader.add_latlonalt(
+          #     lat=wp.lat,
+          #     lon=wp.lon,
+          #     altitude=wp.alt,
+          #     terrain_alt=False,
+          # )
+
+          # Adding waypoints with autocontinue enabled. Params 1-4 are set to the same
+          # values that they are set to in the implementation of `add_latlonalt`:
+          # https://github.com/ArduPilot/pymavlink/blob/master/mavwp.py#L371
+          #
+          mission_loader.add(
+              ItemMsg(
+                sysid, 0, 0, Frame.GLOBAL_RELATIVE_ALT, Cmd.NAV_WAYPOINT,
+                0, 1, 0, 0, 0, 0, wp.lat, wp.lon, wp.alt
+              )
+          )
+
         if land:
             mission_loader.add(
                 ItemMsg(
