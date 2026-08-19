@@ -14,6 +14,8 @@ from simulator.planner.actions import make_start_mission, make_upload_mission
 from simulator.planner.actions.monitoring import make_monitoring
 from simulator.planner.plan import Plan, PlanSpec
 
+from math import nan
+
 @Plan.register("AutoPlan")
 class AutoPlan(Plan):
     """A UAV plan in auto mode to execute a mission file."""
@@ -181,28 +183,37 @@ class AutoPlan(Plan):
         # get the single drone simulation working. If we do plan to keep this change, modify
         # this comment as a "UCI NOTE" to explain why this change is kept.
         #
+        # mission_loader.add(
+        #     ItemMsg(
+        #         sysid,
+        #         0,
+        #         0,
+        #         Frame.GLOBAL_RELATIVE_ALT,
+        #         CmdNav.TAKEOFF,
+        #         0,
+        #         0,
+        #         0,
+        #         0,
+        #         0,
+        #         0,
+        #         *self.wps[0],
+        #     )
+        # )
+        # mission_loader.add_latlonalt(
+        #     lat=self.wps[0].lat,
+        #     lon=self.wps[0].lon,
+        #     altitude=0,
+        #     terrain_alt=False,
+        # )
+
         mission_loader.add(
-            ItemMsg(
-                sysid,
-                0,
-                0,
-                Frame.GLOBAL_RELATIVE_ALT,
-                CmdNav.TAKEOFF,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                *self.wps[0],
-            )
+          ItemMsg(
+              sysid, 0, 0, Frame.GLOBAL_RELATIVE_ALT, CmdNav.TAKEOFF,
+              0, 0, 0, 0, 0, 0,
+              nan, nan, nan, 0
+          )
         )
-        mission_loader.add_latlonalt(
-            lat=self.wps[0].lat,
-            lon=self.wps[0].lon,
-            altitude=0,
-            terrain_alt=False,
-        )
+
         if speed != 5.0:
             # speed_type = 0 → airspeed, 1 → ground speed, 2 → climb rate
             # speed = target speed (in m/s)
