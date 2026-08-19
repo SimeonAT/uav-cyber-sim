@@ -209,7 +209,7 @@ class AutoPlan(Plan):
         mission_loader.add(
           ItemMsg(
               sysid, 0, 0, Frame.GLOBAL_RELATIVE_ALT, CmdNav.TAKEOFF,
-              0, 0, 0, 0, 0, 0,
+              0, 1, 0, 0, 0, 0,
               nan, nan, nan, 0
           )
         )
@@ -227,7 +227,7 @@ class AutoPlan(Plan):
                     0,
                     Frame.GLOBAL_RELATIVE_ALT,
                     Cmd.DO_CHANGE_SPEED,
-                    0,
+                    1,
                     0,
                     speed_type,
                     speed,
@@ -253,7 +253,7 @@ class AutoPlan(Plan):
                     0,
                     Frame.GLOBAL_RELATIVE_ALT,
                     CmdNav.LAND,
-                    0,
+                    0, # No need to autocontinue (i.e. param set to `1`) after landing.
                     0,
                     0,
                     0,
