@@ -76,9 +76,28 @@ class Gazebo(Visualizer[GazVehicle]):
         gra_origin: GRAPose,
         world_path: str,
     ):
-        super().__init__(gra_origin)
-        self.world_path = world_path
-        self.markers: GazMarkers = []
+      super().__init__(gra_origin)
+      self.world_path = world_path
+      self.markers: GazMarkers = []
+      self._set_gps_home_coordinates()
+      return
+
+    def _set_gps_home_coordinates(self) -> None:
+      """ Sets the custom home coordinates used by the given simulation on the GPS. """
+      models_path = Path(PX4_GAZEBO_MODELS) / "gps"
+      sdf_path = models_path / "gps.sdf"
+
+      env = Environment(loader=FileSystemLoader(models_path))
+      template = env.get_template("gps.sdf.jinja")
+      sdf = template.render({
+        "home_latitude": self.gra_origin.lat,
+        "home_longitude": self.gra_origin.lon,
+        "home_altitude": self.gra_origin.alt
+      })
+
+      with open(sdf_path, "w", encoding="utf-8") as f:
+          f.write(sdf)
+      return
 
     def add_vehicle_cmd(self, i: int) -> str:
         """Add gazebo model (only iris TODO: add others)."""
