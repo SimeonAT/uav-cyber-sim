@@ -17,6 +17,7 @@ ALL_PROCESSES = [
     "logic.py",
     "gcs.py",
     "run.py",
+    "px4"
 ]
 
 
