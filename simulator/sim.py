@@ -174,7 +174,7 @@ class Simulator(Generic[V]):
                             f"export PX4_HOME_ALT={self.gra_origin.alt} &&"
                             f"{PX4_BUILD_PATH}/bin/px4"
                             f" -i {ap_to_px4_offset(self.uav_port_offsets[j])}"
-                            # f" -d"
+                            f" -d"
                             f" -w {PX4_DATA_PATH}"
                             f" {PX4_BUILD_PATH}/etc"
                         ),
