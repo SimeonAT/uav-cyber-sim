@@ -210,7 +210,7 @@ class AutoPlan(Plan):
           ItemMsg(
               sysid, 0, 0, Frame.GLOBAL_RELATIVE_ALT, CmdNav.TAKEOFF,
               0, 1, 0, 0, 0, 0,
-              nan, nan, 5, 0
+              self.wps[0].lat, self.wps[0].lon, 5, 0
           )
         )
 

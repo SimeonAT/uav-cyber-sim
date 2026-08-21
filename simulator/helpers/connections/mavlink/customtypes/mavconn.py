@@ -40,6 +40,13 @@ class MAVConnection(Protocol):
     @overload
     def recv_match(
         self,
+        type: Literal["HOME_POSITION"],
+        blocking: bool | None = ...,
+    ) -> mavlink.MAVLink_home_position_message | None: ...
+
+    @overload
+    def recv_match(
+        self,
         type: Literal["PARAM_VALUE"],
         timeout: float | None = ...,
     ) -> mavlink.MAVLink_param_value_message | None: ...
