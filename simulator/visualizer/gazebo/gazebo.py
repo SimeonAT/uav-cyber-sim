@@ -96,7 +96,7 @@ class Gazebo(Visualizer[GazVehicle]):
       })
 
       with open(sdf_path, "w", encoding="utf-8") as f:
-          f.write(sdf)
+        f.write(sdf)
       return
 
     def add_vehicle_cmd(self, i: int) -> str:
