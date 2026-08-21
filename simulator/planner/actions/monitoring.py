@@ -47,15 +47,6 @@ class CheckItems(Step):
             else:
                 return False
 
-        # self.conn.mav.command_long_send(self.conn.target_system, self.conn.target_component,
-        #                                 mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE, 0,
-        #                                 mavutil.mavlink.MAVLINK_MSG_ID_HOME_POSITION, 
-        #                                 0, 0, 0, 0, 0, 0)
-        # home_msg = self.conn.recv_match(type="HOME_POSITION")
-        # if home_msg:
-        #   logging.info(f"Home Position Latitude: {E7ToDeg(home_msg.latitude)}")
-        #   logging.info(f"Home Position Longitude: {E7ToDeg(home_msg.longitude)}")
-
         curr_msg = self.conn.recv_match(type="MISSION_CURRENT")
         # if not curr_msg or curr_msg.seq == self._item_seq:
         #     return False

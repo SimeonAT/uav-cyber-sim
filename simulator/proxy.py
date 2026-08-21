@@ -47,21 +47,12 @@ def main() -> None:
 
     # UCI TODO: Set verbosity from debug level `2` back to variable value `verbose`.
     setup_logging(f"proxy_{system_id}", verbose=verbose, console_output=True)
-    logging.info("Hello World! Starting the Proxy!")
 
     start_proxy(system_id, port_offset)
 
 
 def start_proxy(sysid: int, port_offset: int) -> None:
     """Start bidirectional proxy for a given UAV system_id."""
-    # ap_conn = create_tcp_conn(
-    #     base_port=BasePort.ARP,
-    #     offset=port_offset,
-    #     role="client",
-    #     src_sysid=sysid,
-    #     src_compid=141,
-    # )
-
     px4_conn = create_udp_conn(
         base_port=BasePort.PX4,
         offset=ap_to_px4_offset(port_offset),
@@ -89,16 +80,6 @@ def start_proxy(sysid: int, port_offset: int) -> None:
     rid_sock = create_zmq_socket(zmq_ctx, zmq.PUB, BasePort.RID_DATA, port_offset)
 
     stop_event = threading.Event()
-
-    # ARP → LOG
-    # router1 = MessageRouter(
-    #     source=ap_conn,
-    #     targets=[lg_queue],  # oc_queue,cs_queue,
-    #     labels=["⬅️ LOG ← ARP"],  # "⬅️ ORC ← ARP","⬅️ GCS ← ARP"
-    #     sysid=sysid,
-    #     sender="ARP",
-    #     stop_event=stop_event,
-    # )
 
     # PX4 → LOG
     router1 = MessageRouter(
@@ -165,7 +146,6 @@ def start_proxy(sysid: int, port_offset: int) -> None:
         router1.join()
         router2.join()
         log_file.close()
-        # ap_conn.close()
         px4_conn.close()
         lg_conn.close()
         rid_sock.close(linger=0)
@@ -196,7 +176,6 @@ class MessageRouter(threading.Thread):
     def run(self):
         """Continuously receive messages and dispatch them until stopped."""
         while not self.stop_event.is_set():
-            # timeout = 1
             msg = self.source.recv_match(blocking=True)
             if msg and not self.stop_event.is_set():
                 # logging.debug(f"UAV ({self.sysid}): Received {msg}")
@@ -210,16 +189,6 @@ class MessageRouter(threading.Thread):
                     break
 
                 self.dispatch_message(msg)
-              
-            # UCI TODO: Ending simulation after waiting `timeout` seconds. This is to test
-            #           that how I can stop end a simulation when ArduPilot is removed.
-            # 
-            #           DON'T FORGET to remove these line when working on adding PX4.
-            #
-            # else:
-            #     logging.info(f"Ending simulation when ArduPilot is not present after {timeout} seconds.")
-            #     logging.info("Going to end simulation.")
-            #     self.stop_event.set()
 
     def dispatch_message(self, msg: mavlink.MAVLink_message):
         """Send a message to all targets with timestamp and sender."""

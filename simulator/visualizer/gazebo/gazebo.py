@@ -215,29 +215,6 @@ class Gazebo(Visualizer[GazVehicle]):
               qgc_udp_port=14550
             )
 
-            # with open(sdf_path, "r", encoding="utf-8") as f:
-            #     sdf = f.read()
-
-            # sdf = re.sub(r'<model name="[^"]+">', f'<model name="{name}">', sdf)
-            # sdf = re.sub(
-            #     r"<include>\s*<uri>model://[^<]+</uri>\s*</include>",
-            #     f"<include>\n  <uri>model://{base_models[i]}</uri>\n</include>",
-            #     sdf,
-            # )
-
-            # port_in = base_port_in + i * port_step
-            # port_out = port_in + 1
-            # sdf = re.sub(
-            #     r"<fdm_port_in>\d+</fdm_port_in>",
-            #     f"<fdm_port_in>{port_in}</fdm_port_in>",
-            #     sdf,
-            # )
-            # sdf = re.sub(
-            #     r"<fdm_port_out>\d+</fdm_port_out>",
-            #     f"<fdm_port_out>{port_out}</fdm_port_out>",
-            #     sdf,
-            # )
-
             with open(sdf_path, "w", encoding="utf-8") as f:
                 f.write(sdf)
         return
