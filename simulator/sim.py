@@ -169,6 +169,9 @@ class Simulator(Generic[V]):
                         "sysid": sysid,
                         "port_offset": self.uav_port_offsets[j],
                         "px4_cmd": (
+                            f"export PX4_HOME_LAT={self.gra_origin.lat} && "
+                            f"export PX4_HOME_LON={self.gra_origin.lon} &&"
+                            f"export PX4_HOME_ALT={self.gra_origin.alt} &&"
                             f"{PX4_BUILD_PATH}/bin/px4"
                             f" -i {ap_to_px4_offset(self.uav_port_offsets[j])}"
                             f" -d"
