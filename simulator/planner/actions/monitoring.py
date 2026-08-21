@@ -64,9 +64,9 @@ class CheckItems(Step):
         item = self.conn.recv_match(type="MISSION_ITEM", blocking=True)
         gra_wp = GRA(lat=float(item.x), lon=float(item.y), alt=float(item.z))  # type: ignore
         self.target_pos = self.origin.to_rel(gra_wp)
-        logging.info(
-            f"Vehicle {self.conn.target_system}: 📍 Target Position: {self.target_pos.short()}"
-        )
+        # logging.info(
+        #     f"Vehicle {self.conn.target_system}: 📍 Target Position: {self.target_pos.short()}"
+        # )
         if self._item_seq == self._mission_count - 1:
             return True
         return False
