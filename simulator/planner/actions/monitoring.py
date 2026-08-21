@@ -44,8 +44,11 @@ class CheckItems(Step):
                 return False
 
         curr_msg = self.conn.recv_match(type="MISSION_CURRENT")
-        if not curr_msg or curr_msg.seq == self._item_seq:
-            return False
+        # if not curr_msg or curr_msg.seq == self._item_seq:
+        #     return False
+        if not curr_msg:
+          return False
+
         while self._item_seq < curr_msg.seq:
             logging.info(
                 f"Vehicle {self.conn.target_system}: ⭐ Reached item: {self._item_seq}"
