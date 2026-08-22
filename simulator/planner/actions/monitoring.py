@@ -16,6 +16,7 @@ from simulator.planner.action import Action
 from simulator.planner.step import Step
 
 import pymavlink.dialects.v20.development as px4mavlink
+from simulator.helpers.connections.mavlink.enums import LandState
 
 from cmd import Cmd
 from pymavlink import mavutil
@@ -97,17 +98,17 @@ class CheckEndMission(Step):
 
          Debugging assistance and code by Claude (Anthropic), Claude Sonnet 5,
          August 2026.
-         
-         PX4 v1.14.4 never populates MISSION_CURRENT.mission_state (that
-         logic was added in a later PX4 release), so it always reads 0.
-         ArduPilot's STATUSTEXT "disarming" match also doesn't work since
-         PX4 emits "Disarmed by landing" instead. Using the HEARTBEAT
-         arming bit avoids both issues: it's a standard MAVLink field, not
-         a mission-protocol extension or autopilot-specific string.
+
+         Both the `planner/actions/take_off.py` and `planner/actions/land.py` files in
+         `uav-cyber-sim` also utilizes `EXTENDED_SYS_STATE` whether the drone has
+         taken off or landed, respectively.
       """
-      msg = self.conn.recv_match(type="HEARTBEAT")
-      if msg and not (msg.base_mode & px4mavlink.MAV_MODE_FLAG_SAFETY_ARMED):
-        logging.info(f"Vehicle {self.conn.target_system}: Mission completed (disarmed)")
+      msg = self.conn.recv_match(type="EXTENDED_SYS_STATE", blocking=False)
+      if msg:
+        logging.info(msg)
+
+      if msg and msg.landed_state == LandState.ON_GROUND:
+        logging.info(f"Vehicle {self.conn.target_system}: Mission completed (landed)")
         stop_msg(self.conn, msg_id=MsgID.GLOBAL_POSITION_INT)
         return True
       return False
