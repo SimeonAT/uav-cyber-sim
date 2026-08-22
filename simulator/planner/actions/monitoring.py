@@ -93,15 +93,24 @@ class CheckEndMission(Step):
     #     return False
 
     def check_fn(self) -> bool:
-      """ Check mission completion."""
-      msg = self.conn.recv_match(type="MISSION_CURRENT")
-      if msg:
-        logging.info(msg)
+      """Check mission completion via the HEARTBEAT arming bit.
 
-      if msg and msg.mission_state == px4mavlink.MISSION_STATE_COMPLETE:
+         Debugging assistance and code by Claude (Anthropic), Claude Sonnet 5,
+         August 2026.
+         
+         PX4 v1.14.4 never populates MISSION_CURRENT.mission_state (that
+         logic was added in a later PX4 release), so it always reads 0.
+         ArduPilot's STATUSTEXT "disarming" match also doesn't work since
+         PX4 emits "Disarmed by landing" instead. Using the HEARTBEAT
+         arming bit avoids both issues: it's a standard MAVLink field, not
+         a mission-protocol extension or autopilot-specific string.
+      """
+      msg = self.conn.recv_match(type="HEARTBEAT")
+      if msg and not (msg.base_mode & px4mavlink.MAV_MODE_FLAG_SAFETY_ARMED):
+        logging.info(f"Vehicle {self.conn.target_system}: Mission completed (disarmed)")
+        stop_msg(self.conn, msg_id=MsgID.GLOBAL_POSITION_INT)
         return True
-      else:
-        return False
+      return False
 
 
 def make_monitoring() -> Action[Step]:
