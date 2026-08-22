@@ -109,7 +109,9 @@ class CheckEndMission(Step):
          whether a drone lands to determine whether a mission is complete.
 
          Both implementations fail when a drone has to land or disarm mid-flight and fails to
-         complete a mission. Find a better way to check for mission completion.
+         complete a mission. Find a better way to check for mission completion or mission failure,
+         and write a `logging.info` print statement to indicate whether the mission was successful
+         or a failure.
       """
       msg = self.conn.recv_match(type="EXTENDED_SYS_STATE", blocking=False)
       if msg:
