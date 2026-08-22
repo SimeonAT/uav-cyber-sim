@@ -130,16 +130,6 @@ class Plan(ActionSequence, ABC):
         if navigation_speed != 5:
             actions.add(make_change_nav_speed(speed=navigation_speed))
         actions.add(make_arm())
-        #
-        # Setting PX4 Auto Mode by following the configurations described in
-        # this PX4 forum post:
-        # https://discuss.px4.io/t/mav-cmd-do-set-mode-all-possible-modes/8495/2
-        #
-        # UCI TODO: Modify this to set to Guided Mode as well after you get Auto Mode working.
-        #
-        actions.add(make_set_mode(base_mode=156,
-                                  main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
-                                  sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_MISSION))
         return actions
 
     @classmethod
