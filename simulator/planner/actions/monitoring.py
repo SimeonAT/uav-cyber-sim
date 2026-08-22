@@ -102,6 +102,14 @@ class CheckEndMission(Step):
          Both the `planner/actions/take_off.py` and `planner/actions/land.py` files in
          `uav-cyber-sim` also utilizes `EXTENDED_SYS_STATE` whether the drone has
          taken off or landed, respectively.
+
+         UCI TODO: In the original version of this function in `uav-cyber-sim`, 
+         the function looks for the ArduPilot "disarming" string to check whether a
+         mission is complete. This function implementation for PX4 is similar, checking for
+         whether a drone lands to determine whether a mission is complete.
+
+         Both implementations fail when a drone has to land or disarm mid-flight and fails to
+         complete a mission. Find a better way to check for mission completion.
       """
       msg = self.conn.recv_match(type="EXTENDED_SYS_STATE", blocking=False)
       if msg:
