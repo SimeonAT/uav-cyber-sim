@@ -195,12 +195,6 @@ class CheckSystem(Step):
              if not healthy & enabled & req_sensor:
               missing.append(req_sensor.name)
 
-        # missing = [
-        #     req_sensor.name
-        #     for req_sensor in self.required_sensors
-        #     if not healthy & enabled & req_sensor
-        # ]
-
         if missing:
             raise Exception(
                 f"⚠️ Vehicle {self.conn.target_system}: Missing or unhealthy sensors: "
