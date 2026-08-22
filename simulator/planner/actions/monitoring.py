@@ -114,9 +114,6 @@ class CheckEndMission(Step):
          or a failure.
       """
       msg = self.conn.recv_match(type="EXTENDED_SYS_STATE", blocking=False)
-      if msg:
-        logging.info(msg)
-
       if msg and msg.landed_state == LandState.ON_GROUND:
         logging.info(f"Vehicle {self.conn.target_system}: Mission completed (landed)")
         stop_msg(self.conn, msg_id=MsgID.GLOBAL_POSITION_INT)
