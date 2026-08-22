@@ -95,6 +95,9 @@ class CheckEndMission(Step):
     def check_fn(self) -> bool:
       """ Check mission completion."""
       msg = self.conn.recv_match(type="MISSION_CURRENT")
+      if msg:
+        logging.info(msg)
+
       if msg and msg.mission_state == px4mavlink.MISSION_STATE_COMPLETE:
         return True
       else:
