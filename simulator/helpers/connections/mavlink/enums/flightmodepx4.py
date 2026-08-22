@@ -40,8 +40,9 @@ class CustomSubModeAuto(IntEnum):
 	PX4_CUSTOM_SUB_MODE_AUTO_DESCEND = 20
 
   # UCI NOTE: This is not an actual PX4 MAVLink macro.
-	# Rather it is a stub we created to enable the setting of flight modes
-  # in which no submode is specified (e.g. such as in offboard mode)
+	# Rather it is a stub we created to enable the setting of flight modes in which
+  # no submode is specified, such as in offboard mode as described in: 
+  # https://discuss.px4.io/t/mav-cmd-do-set-mode-all-possible-modes/8495/2
 	#
 	PX4_CUSTOM_SUB_MODE_NONE = 0
 
