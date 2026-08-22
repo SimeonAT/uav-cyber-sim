@@ -146,7 +146,7 @@ class VehicleLogic:
         #
         self.set_guided = make_set_mode(base_mode=209,
                                         main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
-                                        sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_AUTO_LAND)
+                                        sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_NONE)
         self.set_guided.bind(self.conn, self.gra_origin)
         self.set_auto = make_set_mode(base_mode=156,
                                       main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_AUTO,
