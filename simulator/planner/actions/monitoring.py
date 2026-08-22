@@ -15,6 +15,8 @@ from simulator.helpers.coordinates import GRA
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
+import pymavlink.dialects.v20.development as px4mavlink
+
 from cmd import Cmd
 from pymavlink import mavutil
 E7ToDeg = lambda e7 : e7 / 10**7
@@ -79,15 +81,23 @@ class CheckEndMission(Step):
         """No execution needed; just checking."""
         return
 
+    # def check_fn(self) -> bool:
+    #     """Check mission completion."""
+    #     msg = self.conn.recv_match(type="STATUSTEXT")
+    #     if msg:
+    #         text = msg.text.strip().lower()
+    #         if "disarming" in text:
+    #             logging.info(f"Vehicle {self.conn.target_system}: Mission completed")
+    #             stop_msg(self.conn, msg_id=MsgID.GLOBAL_POSITION_INT)
+    #             return True
+    #     return False
+
     def check_fn(self) -> bool:
-        """Check mission completion."""
-        msg = self.conn.recv_match(type="STATUSTEXT")
-        if msg:
-            text = msg.text.strip().lower()
-            if "disarming" in text:
-                logging.info(f"Vehicle {self.conn.target_system}: Mission completed")
-                stop_msg(self.conn, msg_id=MsgID.GLOBAL_POSITION_INT)
-                return True
+      """ Check mission completion."""
+      msg = self.conn.recv_match(type="MISSION_CURRENT")
+      if msg and msg.mission_state == px4mavlink.MISSION_STATE_COMPLETE:
+        return True
+      else:
         return False
 
 
