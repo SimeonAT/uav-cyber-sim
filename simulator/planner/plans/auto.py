@@ -229,7 +229,7 @@ class AutoPlan(Plan):
                     0,
                     Frame.GLOBAL_RELATIVE_ALT,
                     CmdNav.LAND,
-                    0, # No need to autocontinue (i.e. param set to `1`) after landing.
+                    1, # No need to autocontinue (i.e. param set to `1`) after landing.
                     0,
                     0,
                     0,
