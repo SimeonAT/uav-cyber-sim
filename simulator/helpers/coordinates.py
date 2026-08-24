@@ -529,6 +529,10 @@ class ENUPose(XYZPose):
 class NEDPose(XYZPose):
     """Pose in NED frame: position + heading."""
 
+    def unpose(self) -> ENU:
+      """Drop heading and return the END point."""
+      return NED(self.x, self.y, self.z)
+
 
 class GRAPose(LLAPose):
     """Pose in GLOBAL_RELATIVE_ALT frame: lat, lon, alt + heading."""
