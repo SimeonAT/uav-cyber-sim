@@ -230,7 +230,7 @@ class AutoPlan(Plan):
                     Frame.GLOBAL_RELATIVE_ALT,
                     CmdNav.LAND,
                     0,
-                    1, # No need to autocontinue (i.e. param set to `1`) after landing.
+                    1, # Must autocontinue after landing so PX4 can automatically complete mission.
                     0,
                     0,
                     0,
