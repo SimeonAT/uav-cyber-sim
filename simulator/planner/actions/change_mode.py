@@ -12,7 +12,7 @@ from simulator.planner.action import Action
 from simulator.planner.step import Step
 
 from pymavlink import mavutil
-from config import TIMEOUT
+from simulator.config import TIMEOUT
 
 class SwitchMode(Step):
     """Step to switch the UAV flight mode."""

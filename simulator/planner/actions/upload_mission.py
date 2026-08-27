@@ -15,7 +15,7 @@ from simulator.helpers.connections.mavlink.enums import Cmd, MissionResult
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
-from config import TIMEOUT
+from simulator.config import TIMEOUT
 
 
 class ClearMission(Step):
