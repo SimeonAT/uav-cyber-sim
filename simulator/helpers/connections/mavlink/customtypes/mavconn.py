@@ -35,6 +35,7 @@ class MAVConnection(Protocol):
         self,
         type: Literal["HEARTBEAT"],
         blocking: bool | None = ...,
+        timeout: float | None = ...,
     ) -> mavlink.MAVLink_heartbeat_message | None: ...
 
     @overload
