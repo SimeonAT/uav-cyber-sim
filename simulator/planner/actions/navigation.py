@@ -41,6 +41,7 @@ class GoTo(Step):
     def exec_fn(self) -> None:
         """Send a MAVLink command to move the UAV to a global waypoint."""
         gra_wp = self.origin.to_abs(self.wp)
+        logging.info("--- Sending Global Waypoint ---")
         go_msg = mavutil.mavlink.MAVLink_set_position_target_global_int_message(
             10,
             self.conn.target_system,
