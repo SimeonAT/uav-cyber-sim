@@ -11,6 +11,7 @@ from simulator.helpers.connections.mavlink.enums import (
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
+import logging
 from pymavlink import mavutil
 from simulator.config import TIMEOUT
 
@@ -60,6 +61,7 @@ class SwitchMode(Step):
       """
       msg = self.conn.recv_match(type="HEARTBEAT", blocking=False, timeout=TIMEOUT)
       if not msg:
+        logging.info(msg)
         return False
 
       recv_main_mode = (msg.custom_mode >> 16) & 0xFF
