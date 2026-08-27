@@ -33,7 +33,7 @@ class MAVConnection(Protocol):
     @overload
     def recv_match(
         self,
-        type: Literal[list[str]]
+        type: list[str],
         timeout: float | None = ...,
         blocking: bool | None = ...,
     ) -> mavlink.MAVLink_message | None: ...
