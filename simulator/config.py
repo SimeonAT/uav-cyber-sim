@@ -34,6 +34,9 @@ PX4_GAZEBO_MODELS = (
 
 PX4_DATA_PATH = (ROOT / "data" / "px4").resolve()
 
+# How long, in seconds, to wait for a MAVLink packet in non-blocking before timing out.
+TIMEOUT = 0.1
+
 # Ensure logs directory exists (can be cleaned later)
 ARDU_LOGS_PATH.mkdir(parents=True, exist_ok=True)
 

@@ -15,11 +15,11 @@ from simulator.helpers.connections.mavlink.enums import Cmd, MissionResult
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
+from config import TIMEOUT
+
 
 class ClearMission(Step):
     """Step to clear previous mission from the UAV."""
-    timeout = 0.1
-
     def exec_fn(self) -> None:
       """Execute the clear mission."""
       self.conn.mav.mission_clear_all_send(
@@ -40,7 +40,7 @@ class ClearMission(Step):
 
     def check_fn(self) -> bool:
       """Verify that cleared mission was successful."""
-      msg = self.conn.recv_match(type="MISSION_ACK", blocking=False, timeout=ClearMission.timeout)
+      msg = self.conn.recv_match(type="MISSION_ACK", blocking=False, timeout=TIMEOUT)
       if msg:
           logging.info(f"Received Mission ACK: {msg}")
           return True

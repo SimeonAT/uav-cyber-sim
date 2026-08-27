@@ -12,6 +12,7 @@ from simulator.planner.action import Action
 from simulator.planner.step import Step
 
 from pymavlink import mavutil
+from config import TIMEOUT
 
 class SwitchMode(Step):
     """Step to switch the UAV flight mode."""
@@ -57,7 +58,7 @@ class SwitchMode(Step):
       against self.main_mode / self.sub_mode, unlike ArduPilot's flat
       custom_mode integer.
       """
-      msg = self.conn.recv_match(type="HEARTBEAT")
+      msg = self.conn.recv_match(type="HEARTBEAT", blocking=False, timeout=TIMEOUT)
       if not msg:
         return False
 
