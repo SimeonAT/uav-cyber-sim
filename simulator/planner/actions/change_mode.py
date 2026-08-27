@@ -50,7 +50,7 @@ class SwitchMode(Step):
     def check_fn(self) -> bool:
       """
       Verify the UAV has switched to the target flight mode.
-      This function was written by Claude AI (Anthropic).
+      This function was written by Claude AI.
       
       PX4 packs `custom_mode` as a union (see px4_custom_mode.h):
       reserved (bits 0-15), main_mode (bits 16-23), sub_mode (bits 24-31)
@@ -58,11 +58,25 @@ class SwitchMode(Step):
       So the raw uint32 from HEARTBEAT has to be unpacked before comparing
       against self.main_mode / self.sub_mode, unlike ArduPilot's flat
       custom_mode integer.
+
+      Also checks COMMAND_ACK: HEARTBEAT alone gives no failure signal, so a rejected
+      MAV_CMD_DO_SET_MODE (e.g. result=1, TEMPORARILY_REJECTED, which PX4 returns without
+      a prior setpoint stream) would otherwise just hang silently. Logs the rejection reason
+      instead. An ACK alone isn't success — only a matching HEARTBEAT confirms the switch.
       """
-      msg = self.conn.recv_match(type="HEARTBEAT", blocking=False, timeout=TIMEOUT)
+      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK"],
+                                 blocking=False, timeout=TIMEOUT)
       if not msg:
-        logging.info(msg)
         return False
+
+      if msg.get_type() == "COMMAND_ACK":
+          if msg.command == mavutil.mavlink.MAV_CMD_DO_SET_MODE:
+              if msg.result != mavutil.mavlink.MAV_RESULT_ACCEPTED:
+                  logging.error(
+                      f"Mode Switch Rejected: result={msg.result} "
+                      f"({mavutil.mavlink.enums['MAV_RESULT'][msg.result].name})"
+                  )
+          return False  # ACK alone doesn't confirm the mode is active yet
 
       recv_main_mode = (msg.custom_mode >> 16) & 0xFF
       recv_sub_mode = (msg.custom_mode >> 24) & 0xFF
