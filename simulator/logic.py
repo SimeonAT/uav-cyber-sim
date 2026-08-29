@@ -76,6 +76,10 @@ def start_logic(config: LogicConfig):
 
     try:
         while True:
+            #
+            # UCI TODO: Following the approach of sending heartbeat, stream setpoints
+            # at a rate of >= 2Hz. This is the first step to get guided mode working with PX4.
+            #
             if heartbeat_event.trigger():
                 logging.info("--- Streaming Heartbeat ---")
                 send_heartbeat(lg_conn)
