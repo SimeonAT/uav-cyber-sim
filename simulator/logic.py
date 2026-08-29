@@ -75,39 +75,39 @@ def start_logic(config: LogicConfig):
     logic = VehicleLogic(lg_conn, plan=plan, gra_origin=gra_orign)
 
     try:
-        while True:
-            if heartbeat_event.trigger():
-                send_heartbeat(lg_conn)
-                send_heartbeat(cs_conn)
+      while True:
+        if heartbeat_event.trigger():
+          send_heartbeat(lg_conn)
+          send_heartbeat(cs_conn)
 
-            if rid_event.trigger() and rid_mnng.pending:
-                try:
-                    logic.rid = rid_mnng.data
-                    rid_mnng.publish()
-                except Exception as e:
-                    logging.error(f"Error sending RID data: {e}")
-                    pass
-            if logic.plan.state == State.DONE:
-                logic.send_done_msgs(cs_conn)
-                break
-            try:
-                o_rid = rid_mnng.received_rid.get_nowait()
-                # TODO: handle multiple obstacles
-                logging.debug(
-                    f"Get RID:{o_rid and o_rid.enu_pos} from the received_queeue"
-                )
-                if logic.avoidance_method:
-                    logic.check_avoidance(o_rid)
-            except Empty:
-                pass
+        if rid_event.trigger() and rid_mnng.pending:
+          try:
+            logic.rid = rid_mnng.data
+            rid_mnng.publish()
+          except Exception as e:
+            logging.error(f"Error sending RID data: {e}")
+            pass
+        if logic.plan.state == State.DONE:
+          logic.send_done_msgs(cs_conn)
+          break
+        try:
+          o_rid = rid_mnng.received_rid.get_nowait()
+          # TODO: handle multiple obstacles
+          logging.debug(
+              f"Get RID:{o_rid and o_rid.enu_pos} from the received_queeue"
+          )
+          if logic.avoidance_method:
+              logic.check_avoidance(o_rid)
+      except Empty:
+          pass
 
-            logic.act()
-            time.sleep(0.01)
-    finally:
-        cs_conn.close()
-        lg_conn.close()
-        rid_mnng.stop()
-        logging.info(f"Vehicle {sysid} logic stopped")
+      logic.act()
+      time.sleep(0.01)
+  finally:
+    cs_conn.close()
+    lg_conn.close()
+    rid_mnng.stop()
+    logging.info(f"Vehicle {sysid} logic stopped")
 
 
 class LogicConfig(TypedDict):
