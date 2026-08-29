@@ -30,12 +30,9 @@ class GuidedPlan(Plan):
     ):
         super().__init__(name=name)
         self.extend(Plan.arm(navigation_speed=navigation_speed))
-
-        logging.info("--- Setting Guided Mode ---")
         self.add(make_set_mode(base_mode=209,
                                main_mode=CustomMainMode.PX4_CUSTOM_MAIN_MODE_OFFBOARD,
                                sub_mode=CustomSubModeAuto.PX4_CUSTOM_SUB_MODE_NONE))
-
         self.add(make_takeoff(altitude=takeoff_alt))
         self.add(make_path(wps=wps, wp_margin=wp_margin))
         land_wp = ENU(wps[-1].x, wps[-1].y, 0)
