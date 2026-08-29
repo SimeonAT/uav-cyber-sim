@@ -77,6 +77,7 @@ def start_logic(config: LogicConfig):
     try:
         while True:
             if heartbeat_event.trigger():
+                logging.info("--- Streaming Heartbeat ---")
                 send_heartbeat(lg_conn)
                 send_heartbeat(cs_conn)
 
