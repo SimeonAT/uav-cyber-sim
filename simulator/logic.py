@@ -23,7 +23,9 @@ from simulator.helpers.connections.mavlink.enums import CmdCustom, CopterMode
 from simulator.helpers.coordinates import ENU, GRA, XY
 from simulator.helpers.rid import RIDData, RIDManager
 from simulator.helpers.setup_log import setup_logging
-from simulator.params.simulation import HEARTBEAT_FREQUENCY, REMOTE_ID_FREQUENCY
+from simulator.params.simulation import (
+    HEARTBEAT_FREQUENCY, REMOTE_ID_FREQUENCY, SETPOINT_FREQUENCY
+)
 from simulator.planner import Action, Plan, PlanSpec, State, Step
 from simulator.planner.actions import make_set_mode
 from simulator.planner.actions.navigation import GoTo
@@ -35,6 +37,7 @@ from simulator.helpers.connections.mavlink.enums import (
 # TODO: Refactor this module
 heartbeat_event = mavutil.periodic_event(HEARTBEAT_FREQUENCY)
 rid_event = mavutil.periodic_event(REMOTE_ID_FREQUENCY)
+setpoint_event = mavutil.periodic_event(SETPOINT_FREQUENCY)
 
 
 def main():
@@ -80,8 +83,10 @@ def start_logic(config: LogicConfig):
             # UCI TODO: Following the approach of sending heartbeat, stream setpoints
             # at a rate of >= 2Hz. This is the first step to get guided mode working with PX4.
             #
+            if setpoint_event.trigger():
+                logging.info("--- Streaming Setpoints ---")
+
             if heartbeat_event.trigger():
-                logging.info("--- Streaming Heartbeat ---")
                 send_heartbeat(lg_conn)
                 send_heartbeat(cs_conn)
 
