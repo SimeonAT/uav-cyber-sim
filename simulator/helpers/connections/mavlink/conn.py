@@ -7,7 +7,11 @@ from typing import Literal, cast
 from pymavlink import mavutil
 
 from simulator.helpers.connections.mavlink.customtypes.mavconn import MAVConnection
-from simulator.helpers.connections.mavlink.enums import Autopilot, Type
+from simulator.helpers.connections.mavlink.enums import (
+  Autopilot, Type, Frame, MsgID
+)
+
+from simulator.helpers.coordinates import ENU, GRA
 
 
 def connect(device: str, src_sysid: int, src_compid: int) -> MAVConnection:
@@ -33,6 +37,31 @@ def send_heartbeat(
     """Send a GCS heartbeat message to the UAV."""
     # Set the source system ID for this connection
     conn.mav.heartbeat_send(sys_type, ardupilot, 0, 0, 0)
+
+""" Sends MAVLink command to instruct PX4 to move UAV to the next global waypoint.
+    Used to stream next waypoint to PX4 to enable the use of offboard (i.e. guided) mode.
+    https://docs.px4.io/main/en/flight_modes/offboard#technical-summary
+"""
+def send_setpoint(conn: MAVConnection, enu_wp: ENU, origin: GRA, type_mask: int) -> None:
+  gra_wp = origin.to_abs(enu_wp)
+  go_msg = mavutil.mavlink.MAVLink_set_position_target_global_int_message(
+      10,
+      conn.target_system,
+      conn.target_component,
+      Frame.GLOBAL_INT,
+      type_mask,
+      *gra_wp.to_global_int_alt_in_meters(),
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+  )
+  conn.mav.send(go_msg)
+  return
 
 
 def create_udp_conn(
