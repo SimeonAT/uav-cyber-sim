@@ -54,7 +54,7 @@ def start_logic(config: LogicConfig):
     """Start bidirectional proxy for a given UAV system_id."""
     sysid = config["sysid"]
     port_offset = config["port_offset"]
-    gra_orign = GRA(**config["gra_origin_dict"])
+    gra_origin = GRA(**config["gra_origin_dict"])
     plan_spec = PlanSpec(**config["plan_spec"])
 
     lg_conn = create_tcp_conn(
@@ -72,11 +72,11 @@ def start_logic(config: LogicConfig):
         src_sysid=sysid,
         src_compid=140,
     )
-    rid_mnng = RIDManager(sysid, port_offset, gra_orign)
+    rid_mnng = RIDManager(sysid, port_offset, gra_origin)
     rid_mnng.start()
 
     plan = Plan.build(plan_spec)
-    logic = VehicleLogic(lg_conn, plan=plan, gra_origin=gra_orign)
+    logic = VehicleLogic(lg_conn, plan=plan, gra_origin=gra_origin)
 
     try:
         while True:
@@ -88,10 +88,10 @@ def start_logic(config: LogicConfig):
                 if logic.target_pos != None:
                     target_pos = logic.target_pos
                 else:
-                    target_pos = GRA.get_enu_position(gra_orign, lg_conn)
+                    target_pos = GRA.get_enu_position(gra_origin, lg_conn)
 
                 if target_pos != None:
-                    send_setpoint(lg_conn, target_pos, gra_orign, SETPOINT_TYPE_MASK)
+                    send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
                     logging.info("--- Streaming Setpoint ---")
                 else:
                     logging.info("--- Not Streaming Setpoint ---")
