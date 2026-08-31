@@ -1,6 +1,6 @@
 """Init file for connection package."""
 
-from .mavlink.conn import create_tcp_conn, create_udp_conn, send_heartbeat
+from .mavlink.conn import create_tcp_conn, create_udp_conn, send_heartbeat, send_setpoint
 from .mavlink.customtypes.mavconn import MAVConnection
 from .ports import wait_for_port
 from .zeromq import create_zmq_socket, create_zmq_sockets
@@ -13,4 +13,5 @@ __all__ = [
     "create_tcp_conn",
     "send_heartbeat",
     "MAVConnection",
+    "send_setpoint"
 ]
