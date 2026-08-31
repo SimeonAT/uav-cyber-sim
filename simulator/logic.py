@@ -98,8 +98,7 @@ def start_logic(config: LogicConfig):
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
                     logging.info("--- Streaming Setpoint ---")
                 else:
-                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, 
-                            interval=SETPOINT_FREQUENCY * 1_000_000)
+                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, 100_000)
                     logging.info("--- Not Streaming: Asking to Stream Setpoint ---")
 
             if heartbeat_event.trigger():
