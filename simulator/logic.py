@@ -29,7 +29,8 @@ from simulator.helpers.coordinates import ENU, GRA, XY
 from simulator.helpers.rid import RIDData, RIDManager
 from simulator.helpers.setup_log import setup_logging
 from simulator.params.simulation import (
-    HEARTBEAT_FREQUENCY, REMOTE_ID_FREQUENCY, SETPOINT_FREQUENCY, SETPOINT_TYPE_MASK
+    HEARTBEAT_FREQUENCY, REMOTE_ID_FREQUENCY, SETPOINT_FREQUENCY, SETPOINT_TYPE_MASK,
+    GLOBAL_POSITION_REQUEST_RATE_US
 )
 from simulator.planner import Action, Plan, PlanSpec, State, Step
 from simulator.planner.actions import make_set_mode
@@ -98,7 +99,8 @@ def start_logic(config: LogicConfig):
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
                     logging.info("--- Streaming Setpoint ---")
                 else:
-                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, 100_000)
+                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT,
+                            GLOBAL_POSITION_REQUEST_RATE_US)
                     logging.info("--- Not Streaming: Asking to Stream Setpoint ---")
 
             if heartbeat_event.trigger():

@@ -21,3 +21,9 @@ This is the exact same type mask used in `exec_fn` in
 `planners/action/navigation.py`.
 """
 SETPOINT_TYPE_MASK = int(0b110111111000)
+
+""" The rate, in microseconds, to request a stream of Global Position messages from PX4.
+    The value of this rate is the same as the default argument for the
+    `msg_pos_interval` parameter in the `GoTo` class in `planners/action/navigation.py`.
+"""
+GLOBAL_POSITION_REQUEST_RATE_US = 100_000
