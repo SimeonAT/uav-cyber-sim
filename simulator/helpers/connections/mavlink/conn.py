@@ -75,6 +75,7 @@ def send_setpoint(conn: MAVConnection, enu_wp: ENU, origin: GRA, type_mask: int)
       0,
   )
   conn.mav.send(go_msg)
+  logging.info(go_msg)
   return
 
 
