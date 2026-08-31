@@ -20,7 +20,11 @@ from simulator.helpers.connections import (
     send_heartbeat,
     send_setpoint,
 )
-from simulator.helpers.connections.mavlink.enums import CmdCustom, CopterMode
+from simulator.helpers.connections.mavlink.enums import (
+    CmdCustom, CopterMode, 
+    CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL,
+    MsgID
+)
 from simulator.helpers.coordinates import ENU, GRA, XY
 from simulator.helpers.rid import RIDData, RIDManager
 from simulator.helpers.setup_log import setup_logging
@@ -30,9 +34,9 @@ from simulator.params.simulation import (
 from simulator.planner import Action, Plan, PlanSpec, State, Step
 from simulator.planner.actions import make_set_mode
 from simulator.planner.actions.navigation import GoTo
-
-from simulator.helpers.connections.mavlink.enums import (
-  CustomMainMode, CustomSubModeAuto, CustomSubModePOSCTL
+from simulator.helpers.connections.mavlink.streams import (
+    ask_msg,
+    stop_msg,
 )
 
 # TODO: Refactor this module
@@ -94,7 +98,9 @@ def start_logic(config: LogicConfig):
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
                     logging.info("--- Streaming Setpoint ---")
                 else:
-                    logging.info("--- Not Streaming Setpoint ---")
+                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, 
+                            interval=SETPOINT_FREQUENCY * 1_000_000)
+                    logging.info("--- Not Streaming: Asking to Stream Setpoint ---")
 
             if heartbeat_event.trigger():
                 send_heartbeat(lg_conn)
