@@ -1,4 +1,16 @@
 """Utility functions for MAVLink connections and messaging."""
+#
+# Import ENU/GRA only for type checkers, not at runtime, to avoid a circular import: 
+# simulator.helpers.coordinates imports MAVConnection from this package, so importing
+# coordinates back at module load time would try to import this file while it's still 
+# mid-initialization.
+#
+# Authored by Claude (Sonnet 5), Anthropic, August 2026.
+#
+from __future__ import annotations
+from typing import Literal, cast, TYPE_CHECKING
+if TYPE_CHECKING:
+    from simulator.helpers.coordinates import ENU, GRA
 
 import logging
 import time
@@ -8,10 +20,9 @@ from pymavlink import mavutil
 
 from simulator.helpers.connections.mavlink.customtypes.mavconn import MAVConnection
 from simulator.helpers.connections.mavlink.enums import (
-  Autopilot, Type, Frame, MsgID
+  Autopilot, Type, 
+  Frame, MsgID
 )
-
-from simulator.helpers.coordinates import ENU, GRA
 
 
 def connect(device: str, src_sysid: int, src_compid: int) -> MAVConnection:
