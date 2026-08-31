@@ -15,3 +15,9 @@ UCI NOTE: To enable offboard (i.e. guided) mode, PX4 requires that setpoints
           https://docs.px4.io/main/en/flight_modes/offboard#technical-summary
 """
 SETPOINT_FREQUENCY: int = 2 # Hz
+
+""" 
+This is the exact same type mask used in `exec_fn` in 
+`planners/action/navigation.py`.
+"""
+SETPOINT_TYPE_MASK = int(0b110111111000)
