@@ -52,6 +52,9 @@ def send_heartbeat(
 """ Sends MAVLink command to instruct PX4 to move UAV to the next global waypoint.
     Used to stream next waypoint to PX4 to enable the use of offboard (i.e. guided) mode.
     https://docs.px4.io/main/en/flight_modes/offboard#technical-summary
+
+    To accomplish this task, this function's implementation is a modified version of
+    `exec_fn` in `planners/action/navigation.py`.
 """
 def send_setpoint(conn: MAVConnection, enu_wp: ENU, origin: GRA, type_mask: int) -> None:
   gra_wp = origin.to_abs(enu_wp)
