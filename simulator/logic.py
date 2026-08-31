@@ -92,7 +92,7 @@ def start_logic(config: LogicConfig):
 
                 if target_pos != None:
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
-                    # logging.info("--- Streaming Setpoint ---")
+                    logging.info("--- Streaming Setpoint ---")
                 else:
                     logging.info("--- Not Streaming Setpoint ---")
 
