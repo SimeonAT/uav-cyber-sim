@@ -65,7 +65,7 @@ class SwitchMode(Step):
       instead. An ACK alone isn't success — only a matching HEARTBEAT confirms the switch.
       """
       msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK"],
-                                 blocking=False, timeout=TIMEOUT)
+                                 blocking=True, timeout=TIMEOUT)
       if not msg:
         return False
 
