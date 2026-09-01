@@ -39,6 +39,7 @@ from simulator.helpers.connections.mavlink.streams import (
     ask_msg,
     stop_msg,
 )
+from simulator.planner.actions.change_mode import SwitchMode
 
 # TODO: Refactor this module
 heartbeat_event = mavutil.periodic_event(HEARTBEAT_FREQUENCY)
@@ -95,6 +96,12 @@ def start_logic(config: LogicConfig):
                     target_pos = logic.target_pos
                 else:
                     target_pos = GRA.get_enu_position(gra_origin, lg_conn)
+
+                if target_pos is None and isinstance(logic.current_step, SwitchMode):
+                    msg = logic.current_step.global_pos_int_msg
+                    if msg is not None:
+                      gra_target_pos = GRA.from_global_int(msg.lat, msg.lon, msg.alt)
+                      target_pos = gra_origin.to_rel(gra_target_pos)
 
                 if target_pos != None:
                     logging.info("--- Streaming Setpoint ---")

@@ -28,6 +28,9 @@ class SwitchMode(Step):
         self.main_mode = main_mode
         self.sub_mode = sub_mode
 
+        self.global_pos_int_msg = None
+        return
+
     def exec_fn(self) -> None:
         """Send the SET_MODE command to the UAV with the given mode value."""
         # self.conn.mav.set_mode_send(
@@ -64,19 +67,23 @@ class SwitchMode(Step):
       a prior setpoint stream) would otherwise just hang silently. Logs the rejection reason
       instead. An ACK alone isn't success — only a matching HEARTBEAT confirms the switch.
       """
-      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK"],
+      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK", "GLOBAL_POSITION_INT"],
                                  blocking=True, timeout=TIMEOUT)
       if not msg:
         return False
 
       if msg.get_type() == "COMMAND_ACK":
-          if msg.command == mavutil.mavlink.MAV_CMD_DO_SET_MODE:
-              if msg.result != mavutil.mavlink.MAV_RESULT_ACCEPTED:
-                  logging.error(
-                      f"Mode Switch Rejected: result={msg.result} "
-                      f"({mavutil.mavlink.enums['MAV_RESULT'][msg.result].name})"
-                  )
-          return False  # ACK alone doesn't confirm the mode is active yet
+        if msg.command == mavutil.mavlink.MAV_CMD_DO_SET_MODE:
+          if msg.result != mavutil.mavlink.MAV_RESULT_ACCEPTED:
+            logging.error(
+              f"Mode Switch Rejected: result={msg.result} "
+              f"({mavutil.mavlink.enums['MAV_RESULT'][msg.result].name})"
+            )
+        return False  # ACK alone doesn't confirm the mode is active yet
+
+      elif msg.get_type() == "GLOBAL_POSITION_INT":
+        self.global_pos_int_msg = msg
+        return False
 
       recv_main_mode = (msg.custom_mode >> 16) & 0xFF
       recv_sub_mode = (msg.custom_mode >> 24) & 0xFF
