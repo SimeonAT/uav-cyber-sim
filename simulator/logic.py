@@ -12,7 +12,7 @@ from typing import Any, TypedDict
 from pymavlink import mavutil
 from pymavlink.dialects.v20 import ardupilotmega as mavlink
 
-from simulator.config import DATA_PATH, BasePort
+from simulator.config import DATA_PATH, BasePort, TIMEOUT
 from simulator.helpers.connections import (
     MAVConnection,
     create_tcp_conn,
@@ -99,9 +99,14 @@ def start_logic(config: LogicConfig):
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)
                     logging.info("--- Streaming Setpoint ---")
                 else:
-                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT,
-                            GLOBAL_POSITION_REQUEST_RATE_US)
                     logging.info("--- Not Streaming: Asking to Stream Setpoint ---")
+                    ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, GLOBAL_POSITION_REQUEST_RATE_US)
+
+                    msg = lg_conn.recv_match(type=["COMMAND_ACK"], blocking=False, timeout=TIMEOUT)
+                    if msg:
+                        logging.info(msg)
+                    else:
+                        logging.info("--- Failed to Receive Command ACK for Streaming Setpoint Request ---")
 
             if heartbeat_event.trigger():
                 send_heartbeat(lg_conn)
