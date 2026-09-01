@@ -14,6 +14,7 @@ from typing import (
 
 import folium
 import numpy as np
+from time import time
 from geopy import distance
 from matplotlib.axes import Axes
 from pymap3d import enu2geodetic, geodetic2enu  # type: ignore
@@ -323,9 +324,6 @@ class ENU(XYZ):
             return cls.from_ned(msg.x, msg.y, msg.z)
         return None
 
-    def get_position_from_cache(self, conn: MAVConnection) -> GRA | None:
-        return None
-
     def get_position(self, conn: MAVConnection) -> ENU | None:
         """Alias for get_rel_position."""
         rel_pos = self.get_rel_position(conn)
@@ -431,6 +429,23 @@ class GRA(LLA):
         folium.Marker(
             location=[self.lat, self.lon], popup=label, icon=folium.Icon(color=color)
         ).add_to(map_obj)
+
+    @classmethod
+    def get_position_from_cache(cls, conn: MAVConnection) -> GRA | None:
+        """
+        This function was written by Claude AI. The docstring comment for this
+        function was initially written by Claude and manually edited afterwards.
+
+        This function returns the UAV's last known global position from pymavlink's
+        message `conn.messages` cache. Non-blocking: the function relies on other `recv_msg()`
+        calls elsewhere in the codebase keeping the cache warm (they already do at ≥ 10Hz).
+        """
+        msg = conn.messages.get("GLOBAL_POSITION_INT")
+        if msg is None:
+            return None
+        if time() - msg._timestamp > 1.0:  # staleness guard
+            return None
+        return cls.from_global_int(msg.lat, msg.lon, msg.alt)
 
     @classmethod
     def get_position(cls, conn: MAVConnection) -> GRA | None:
