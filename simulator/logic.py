@@ -103,7 +103,6 @@ def start_logic(config: LogicConfig):
                 ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, GLOBAL_POSITION_REQUEST_RATE_US)
                 msg = lg_conn.recv_match(type="COMMAND_ACK", blocking=True, timeout=0.5)
                 if msg:
-                    logging.info(msg)
                     streaming_global_pos = True
 
             if heartbeat_event.trigger():
