@@ -102,7 +102,7 @@ def start_logic(config: LogicConfig):
                     logging.info("--- Not Streaming: Asking to Stream Setpoint ---")
                     ask_msg(lg_conn, MsgID.GLOBAL_POSITION_INT, GLOBAL_POSITION_REQUEST_RATE_US)
 
-                    msg = lg_conn.recv_match(type=["COMMAND_ACK"], blocking=False, timeout=TIMEOUT)
+                    msg = lg_conn.recv_match(type="COMMAND_ACK", blocking=True, timeout=TIMEOUT)
                     if msg:
                         logging.info(msg)
                     else:
