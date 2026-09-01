@@ -97,12 +97,6 @@ def start_logic(config: LogicConfig):
                 else:
                     target_pos = GRA.get_enu_position(gra_origin, lg_conn)
 
-                if target_pos is None and isinstance(logic.current_step, SwitchMode):
-                    msg = logic.current_step.global_pos_int_msg
-                    if msg is not None:
-                      gra_target_pos = GRA.from_global_int(msg.lat, msg.lon, msg.alt)
-                      target_pos = gra_origin.to_rel(gra_target_pos)
-
                 if target_pos != None:
                     logging.info("--- Streaming Setpoint ---")
                     send_setpoint(lg_conn, target_pos, gra_origin, SETPOINT_TYPE_MASK)

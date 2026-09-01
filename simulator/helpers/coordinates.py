@@ -323,6 +323,9 @@ class ENU(XYZ):
             return cls.from_ned(msg.x, msg.y, msg.z)
         return None
 
+    def get_position_from_cache(self, conn: MAVConnection) -> GRA | None:
+        return None
+
     def get_position(self, conn: MAVConnection) -> ENU | None:
         """Alias for get_rel_position."""
         rel_pos = self.get_rel_position(conn)

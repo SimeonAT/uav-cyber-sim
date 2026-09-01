@@ -27,8 +27,6 @@ class SwitchMode(Step):
         self.base_mode = base_mode
         self.main_mode = main_mode
         self.sub_mode = sub_mode
-
-        self.global_pos_int_msg = None
         return
 
     def exec_fn(self) -> None:
@@ -67,7 +65,7 @@ class SwitchMode(Step):
       a prior setpoint stream) would otherwise just hang silently. Logs the rejection reason
       instead. An ACK alone isn't success — only a matching HEARTBEAT confirms the switch.
       """
-      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK", "GLOBAL_POSITION_INT"],
+      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK"],
                                  blocking=True, timeout=TIMEOUT)
       if not msg:
         return False
@@ -79,11 +77,8 @@ class SwitchMode(Step):
               f"Mode Switch Rejected: result={msg.result} "
               f"({mavutil.mavlink.enums['MAV_RESULT'][msg.result].name})"
             )
+            self.exec_fn()
         return False  # ACK alone doesn't confirm the mode is active yet
-
-      elif msg.get_type() == "GLOBAL_POSITION_INT":
-        self.global_pos_int_msg = msg
-        return False
 
       recv_main_mode = (msg.custom_mode >> 16) & 0xFF
       recv_sub_mode = (msg.custom_mode >> 24) & 0xFF
