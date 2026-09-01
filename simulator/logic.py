@@ -91,11 +91,14 @@ def start_logic(config: LogicConfig):
             # UCI TODO: Following the approach of sending heartbeat, stream setpoints
             # at a rate of >= 2Hz. This is the first step to get guided mode working with PX4.
             #
+            target_pos = None
             if streaming_global_pos and setpoint_event.trigger():
                 if logic.target_pos != None:
                     target_pos = logic.target_pos
                 else:
-                    target_pos = GRA.get_enu_position(gra_origin, lg_conn)
+                    target_pos_gra = GRA.get_position_from_cache(lg_conn)
+                    if target_pos_gra is not None:
+                        target_pos = gra_origin.to_rel(target_pos_gra)
 
                 if target_pos != None:
                     logging.info("--- Streaming Setpoint ---")
