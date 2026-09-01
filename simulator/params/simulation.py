@@ -14,7 +14,7 @@ UCI NOTE: To enable offboard (i.e. guided) mode, PX4 requires that setpoints
           be streamed at a frequency of >= 2 Hz.
           https://docs.px4.io/main/en/flight_modes/offboard#technical-summary
 """
-SETPOINT_FREQUENCY: int = 2 # Hz
+SETPOINT_FREQUENCY: int = 5 # Hz
 
 """ 
 This is the exact same type mask used in `exec_fn` in 
