@@ -2,7 +2,7 @@
 
 ## A Networked Multi-UAV Simulation Framework for Coordination and Cybersecurity Research
 
-UAV-CYBER-SIM is a modular, distributed simulator for evaluating coordinated multi-UAV operations, ground control logic, and cybersecurity vulnerabilities. It integrates ArduPilot, Gazebo, QGroundControl, and PyMAVLink to enable realistic mission execution, MAVLink communication, plan approval, and testing of system-level resilience.
+This is a fork of UAV-CYBER-SIM, which is a modular, distributed simulator for evaluating coordinated multi-UAV operations, ground control logic, and cybersecurity vulnerabilities. It has been modified to integrate PX4 instead of ArduPilot. Keeping in line with the original version of UAV-CYBER-SIM, it still integrates Gazebo, QGroundControl, and PyMAVLink to enable realistic mission execution, MAVLink communication, plan approval, and testing of system-level resilience.
 
 ---
 
