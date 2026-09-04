@@ -73,6 +73,7 @@ class BasePort(IntEnum):
     GCS_ZMQ = 30000  # GCS ZMQ (GCS->ORC)
 
 """ Creates a per-instance PX4 working directory for a given drone in the simulation.
+    https://github.com/PX4/PX4-Autopilot/pull/9088
 """
 def px4_create_data_path(instance_num: int):
    return (ROOT / "data" / f"px4-instance-{instance_num}").resolve()
