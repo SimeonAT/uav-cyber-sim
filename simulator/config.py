@@ -32,8 +32,6 @@ PX4_GAZEBO_MODELS = (
   / "gazebo-classic" / "sitl_gazebo-classic" / "models"
 )
 
-PX4_DATA_PATH = (ROOT / "data" / "px4").resolve()
-
 """
 Seconds to wait for a MAVLink packet before timing out.
 """
@@ -73,6 +71,11 @@ class BasePort(IntEnum):
 
     # ONE-PER-GCS PORTS
     GCS_ZMQ = 30000  # GCS ZMQ (GCS->ORC)
+
+""" Creates a per-instance PX4 working directory for a given drone in the simulation.
+"""
+def px4_create_data_path(instance_num: int):
+   return (ROOT / "data" / f"px4-instance-{instance_num}").resolve()
 
 """
 PX4 UDP offboard base port starts at 14540 and will be +1 for each instance < 9.

@@ -16,7 +16,7 @@ from simulator.config import (
     ENV_CMD_PYT,
     VEH_PARAMS_PATH,
     PX4_BUILD_PATH,
-    PX4_DATA_PATH,
+    px4_create_data_path,
     BasePort,
     ap_to_px4_offset,
 )
@@ -175,7 +175,7 @@ class Simulator(Generic[V]):
                             f"{PX4_BUILD_PATH}/bin/px4"
                             f" -i {ap_to_px4_offset(self.uav_port_offsets[j])}"
                             # f" -d"
-                            f" -w {PX4_DATA_PATH}"
+                            f" -w {px4_create_data_path(j)}"
                             f" {PX4_BUILD_PATH}/etc"
                         ),
                         "ardupilot_cmd": (
