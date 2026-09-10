@@ -188,8 +188,6 @@ RUN source ~/miniconda3/bin/activate && \
 # CLONE THE REPO
 RUN git clone https://github.com/SimeonAT/uav-cyber-sim.git
 
-
-
 # INSTALL ULI NET SIM
 FROM uli-net-sim:latest AS netsim
 RUN mkdir -p /deps && apt-mark showmanual | sort -u > /deps/packages.txt
@@ -214,6 +212,12 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
   chgrp wireshark /usr/bin/dumpcap && \
   chmod 750 /usr/bin/dumpcap && \
   setcap cap_net_raw,cap_net_admin+eip /usr/bin/dumpcap
+
+# Install Ubuntu utility packages for examining which processes are running.
+# Used by the `make clean-processes` command in `px4/Makefile` to clean leftover processes
+# created when running a given `uav-cyber-sim` simulation.
+#
+RUN apt-get update && apt-get install --yes --no-install-recommends iproute2 lsof
 
 USER ubuntu
 WORKDIR /home/ubuntu/uav-cyber-sim
