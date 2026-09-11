@@ -196,10 +196,11 @@ class CheckSystem(Step):
               missing.append(req_sensor.name)
 
         if missing:
-            raise Exception(
+            logging.warning(
                 f"⚠️ Vehicle {self.conn.target_system}: Missing or unhealthy sensors: "
                 f"{', '.join(missing)}"
             )
+            return False
             
         stop_msg(self.conn, msg_id=MsgID.SYS_STATUS)
         return True
