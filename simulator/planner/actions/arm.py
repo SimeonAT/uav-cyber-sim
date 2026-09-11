@@ -10,6 +10,10 @@ from simulator.helpers.connections.mavlink.enums import Cmd, ModeFlag
 from simulator.planner.action import Action
 from simulator.planner.step import Step
 
+import logging
+from pymavlink import mavutil
+from simulator.config import TIMEOUT
+
 
 class Arm(Step):
     """Step to arm the UAV."""
@@ -31,12 +35,23 @@ class Arm(Step):
         )
 
     def check_fn(self) -> bool:
-        """Check if the UAV is armed by inspecting HEARTBEAT messages."""
-        msg = self.conn.recv_match(type="HEARTBEAT")
-        if msg:
-            if msg.base_mode & ModeFlag.SAFETY_ARMED:
-                return True
-        return False
+      """Check if the UAV is armed by inspecting HEARTBEAT and COMMAND_ACK messages."""
+      msg = self.conn.recv_match(type=["HEARTBEAT", "COMMAND_ACK"], blocking=True,
+                                  timeout=TIMEOUT)
+      if msg:
+        if msg.get_type() == "COMMAND_ACK":
+          if msg.command == Cmd.COMPONENT_ARM_DISARM:
+            if msg.result != mavutil.mavlink.MAV_RESULT_ACCEPTED:
+              logging.error(
+                f"Arm/Disarm Instruction Rejected: result={msg.result} "
+                f"({mavutil.mavlink.enums['MAV_RESULT'][msg.result].name})"
+              )
+              self.exec_fn()
+
+        elif msg.base_mode & ModeFlag.SAFETY_ARMED:
+          return True
+
+      return False
 
 
 def make_arm() -> Action[Step]:
