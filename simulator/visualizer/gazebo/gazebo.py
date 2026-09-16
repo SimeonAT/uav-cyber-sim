@@ -75,11 +75,13 @@ class Gazebo(Visualizer[GazVehicle]):
         self,
         gra_origin: GRAPose,
         world_path: str,
+        headless=False,
     ):
       super().__init__(gra_origin)
       self.world_path = world_path
       self.markers: GazMarkers = []
       self._set_gps_home_coordinates()
+      self.headless = headless
       return
 
     def _set_gps_home_coordinates(self) -> None:
@@ -115,7 +117,7 @@ class Gazebo(Visualizer[GazVehicle]):
         #           The function call was modified to show the stdout/stderr output of Gazebo.
         #
         create_process(
-            f"gazebo {updated_world}",
+            f"{'gazebo' if not self.headless else 'gzserver'} {updated_world}",
             visible=True,
             after="bash",
             title="Gazebo Debug Output",
