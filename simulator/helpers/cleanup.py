@@ -11,6 +11,7 @@ ALL_PROCESSES = [
     "QGroundControl",
     "arducopter",
     "gazebo",
+    "gzserver",
     "mavproxy",
     "proxy.py",
     "run_many_uavs.py",
