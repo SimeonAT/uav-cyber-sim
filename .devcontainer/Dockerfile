@@ -105,10 +105,11 @@ RUN git clone https://github.com/4belito/qgroundcontrol.git --recurse-submodules
   git submodule update --init --recursive
 ARG PIP_BREAK_SYSTEM_PACKAGES=1
 RUN cd qgroundcontrol && \
+  sed -i '/CONFIG += ltcg/d' QGCCommon.pri && \
   sudo ./deploy/docker/install-qt-linux.sh && \
   mkdir build && \
   cd build && \
-  qmake .. CONFIG+=qtquickcompiler QMAKE_CXXFLAGS_RELEASE-=-flto QMAKE_LFLAGS_RELEASE-=-flto && \
+  qmake .. && \
   make -j$(nproc) && \
   cd .. && \
   ./deploy/create_linux_appimage.sh . ./build/staging && \
