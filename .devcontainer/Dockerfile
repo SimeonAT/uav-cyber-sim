@@ -108,7 +108,7 @@ RUN cd qgroundcontrol && \
   sudo ./deploy/docker/install-qt-linux.sh && \
   mkdir build && \
   cd build && \
-  qmake .. && \
+  qmake .. CONFIG+=qtquickcompiler QMAKE_CXXFLAGS_RELEASE-=-flto QMAKE_LFLAGS_RELEASE-=-flto && \
   make -j$(nproc) && \
   cd .. && \
   ./deploy/create_linux_appimage.sh . ./build/staging && \
