@@ -17,3 +17,5 @@ eeprom*.bin
 # experimental code
 1-auto_mode2.ipynb
 test.*
+
+.devcontainer/docker-run-mac.sh

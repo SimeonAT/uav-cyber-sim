@@ -105,7 +105,7 @@ RUN git clone https://github.com/4belito/qgroundcontrol.git --recurse-submodules
   git submodule update --init --recursive
 ARG PIP_BREAK_SYSTEM_PACKAGES=1
 RUN cd qgroundcontrol && \
-  sed -i '/CONFIG += ltcg/d' QGCCommon.pri && \
+  sed -i -e '/CONFIG += ltcg/d' -e 's/-Werror/-Wno-error/' QGCCommon.pri && \
   sudo ./deploy/docker/install-qt-linux.sh && \
   mkdir build && \
   cd build && \
