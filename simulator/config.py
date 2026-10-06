@@ -60,7 +60,18 @@ class BasePort(IntEnum):
     ARP3 = 5763  # ArduPilot SERIAL2 (TCP: auto-opened by SITL)
     QGC = 5763  # QGroundControl (TCP: QGC->ARP). it must be 5762 or 5763.
     LOG = 14551  # Vehicle(TCP: PROXY->LOGIC)
-    GCS = 14555  # Ground Control Station(UDP: LOGIC->GCS)
+    #
+    # UCI NOTE: The original GCS port used in the original `uav-cyber-sim` source code is
+    #           port number 14555, with each additional GCS having a port offset of +10
+    #           (as stated above).
+    #
+    #           However, a base port of 14555, with offsets of +10, overlaps with PX4's default
+    #           port range of 14540-14549.
+    #
+    #           As a result, we changed the GCS base port from 14555 to 5760 to avoid overlap
+    #           with PX4's UAV port ranges.
+    #
+    GCS = 5760  # Ground Control Station(UDP: LOGIC->GCS)
     RID_UP = 14556  # Remote ID (LOGIC->ORC)
     RID_DOWN = 14557  # Remote ID (ORC->LOGIC)
     RID_DATA = 14558  # Remote ID (PROXY->LOGIC) internal
