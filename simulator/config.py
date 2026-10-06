@@ -66,10 +66,11 @@ class BasePort(IntEnum):
     #           (as stated above).
     #
     #           However, a base port of 14555, with offsets of +10, overlaps with PX4's default
-    #           port range of 14540-14549.
+    #           MAVLink port range of 14540-14549:
+    #           https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
     #
     #           As a result, we changed the GCS base port from 14555 to 5760 to avoid overlap
-    #           with PX4's UAV port ranges.
+    #           with PX4's MAVLink port ranges.
     #
     GCS = 5760  # Ground Control Station(UDP: LOGIC->GCS)
     RID_UP = 14556  # Remote ID (LOGIC->ORC)
