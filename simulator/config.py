@@ -78,7 +78,7 @@ class BasePort(IntEnum):
     RID_DATA = 14558  # Remote ID (PROXY->LOGIC) internal
 
     # PX4 PORTS
-    PX4 = 14540         # PX4 onboard base port (UDP: PROXY -> PX4)
+    PX4 = 14540         # PX4 offboard base port (UDP: PROXY -> PX4)
     PX4_QGC = 14550     # QGroundControl (UDP: QGC -> PX4)
 
     # ONE-PER-GCS PORTS
