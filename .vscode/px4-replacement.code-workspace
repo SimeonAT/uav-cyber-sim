@@ -11,6 +11,9 @@
     },
     {
       "path": "../../miniconda3/envs/uav-cyber-sim/lib/python3.11/site-packages/pymavlink/dialects/v10"
+    },
+    {
+      "path": "../../PX4-Autopilot"
     }
   ],
   "settings": {
