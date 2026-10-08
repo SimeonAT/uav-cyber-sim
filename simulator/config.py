@@ -78,7 +78,7 @@ class BasePort(IntEnum):
     RID_DATA = 14558  # Remote ID (PROXY->LOGIC) internal
 
     # PX4 PORTS
-    PX4 = 14540         # PX4 offboard base port (UDP: PROXY -> PX4)
+    PX4 = 16000         # PX4 offboard base port (UDP: PROXY -> PX4)
     PX4_QGC = 14550     # QGroundControl (UDP: QGC -> PX4)
 
     # ONE-PER-GCS PORTS
@@ -97,8 +97,8 @@ PX4 UDP offboard base port starts at 14540 and will be +1 for each instance < 9.
 """
 def px4_offboard_port(base_port=BasePort.PX4, port_offset=0):
   sdk_udp_port = base_port + port_offset
-  if sdk_udp_port > 14549:
-    sdk_udp_port = 14549
+  # if sdk_udp_port > 14549:
+  #   sdk_udp_port = 14549
   return sdk_udp_port
 
 def ap_to_px4_offset(ap_port_offset):
