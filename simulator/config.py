@@ -104,7 +104,7 @@ def px4_offboard_port(base_port=BasePort.PX4, port_offset=0):
 def ap_to_px4_offset(ap_port_offset):
   assert(ap_port_offset % 10 == 0)
   port_offset = int(ap_port_offset / 10)
-  return 9 if port_offset > 9 else port_offset
+  return port_offset
 
 # --- UAV Visualization Colors ---
 class Color(StrEnum):
