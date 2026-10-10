@@ -123,7 +123,7 @@ def start_logic(config: LogicConfig):
                 o_rid = rid_mnng.received_rid.get_nowait()
                 # TODO: handle multiple obstacles
                 logging.debug(
-                    f"Get RID:{o_rid and o_rid.enu_pos} from the received_queeue"
+                    f"Get RID:{o_rid and o_rid.enu_pos} from the received_queue"
                 )
                 if logic.avoidance_method:
                     logic.check_avoidance(o_rid)
