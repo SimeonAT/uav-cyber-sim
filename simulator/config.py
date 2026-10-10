@@ -65,9 +65,10 @@ class BasePort(IntEnum):
     #           port number 14555, with each additional GCS having a port offset of +10
     #           (as stated above).
     #
-    #           However, a base port of 14555, with offsets of +10, overlaps with PX4's default
-    #           MAVLink port range of 14540-14549:
-    #           https://docs.px4.io/main/en/simulation/#default-px4-mavlink-udp-ports
+    #           However, a base port of 14555, with offsets of +10 for each instance,
+    #           overlaps with PX4's default MAVLink port ranges as specified in
+    #           `px4-rc.mavlink`:
+    #           https://github.com/SimeonAT/PX4-Autopilot/blob/uav-cyber-sim/ROMFS/px4fmu_common/init.d-posix/px4-rc.mavlink
     #
     #           As a result, we changed the GCS base port from 14555 to 5760 to avoid overlap
     #           with PX4's MAVLink port ranges.
