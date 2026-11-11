@@ -73,6 +73,11 @@ class BasePort(IntEnum):
     #           As a result, we changed the GCS base port from 14555 to 5760 to avoid overlap
     #           with PX4's MAVLink port ranges.
     #
+    #           Help Resources Utilized when developing this solution:
+    #           https://discuss.px4.io/t/running-gazebo-simulation-with-more-than-10-drones/21690/2
+    #           https://discuss.px4.io/t/how-to-connect-to-multiple-vehicles-with-system-id-greater-than-9/26595/5
+    #           
+    #
     GCS = 5760  # Ground Control Station(UDP: LOGIC->GCS)
     RID_UP = 14556  # Remote ID (LOGIC->ORC)
     RID_DOWN = 14557  # Remote ID (ORC->LOGIC)
