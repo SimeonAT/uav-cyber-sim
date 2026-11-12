@@ -73,7 +73,7 @@ class BasePort(IntEnum):
     #           As a result, we changed the GCS base port from 14555 to 5760 to avoid overlap
     #           with PX4's MAVLink port ranges.
     #
-    #           Help Resources Utilized when Developing this Solution:
+    #           We got the idea to take this approach from the following resources:
     #           https://discuss.px4.io/t/running-gazebo-simulation-with-more-than-10-drones/21690/2
     #           https://discuss.px4.io/t/how-to-connect-to-multiple-vehicles-with-system-id-greater-than-9/26595/5
     #           
